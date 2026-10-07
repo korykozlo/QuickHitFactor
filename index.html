@@ -152,7 +152,8 @@ footer a { color: inherit; }
   const esc = (s) => String(s).replace(/[&<>"]/g, (ch) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[ch]));
   const state = { data: null, code: null, division: "carry-optics", pf: "minor", cls: "A", misses: "0", customHHF: {} };
 
-  fetch("data/classifiers.json").then((r) => r.json()).then((data) => {
+  // Revalidate on every load so a data update shows up without waiting out the browser cache.
+  fetch("data/classifiers.json", { cache: "no-cache" }).then((r) => r.json()).then((data) => {
     state.data = data;
     const fromHash = location.hash.slice(1);
     state.code = data.classifiers.some((c) => c.code === fromHash) ? fromHash : "99-11";
