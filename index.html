@@ -85,7 +85,8 @@ figure figcaption { padding: 6px 10px; font-size: .78rem; color: #5b6672; backgr
 .seg button { padding: 6px 12px; border: 1px solid var(--line); border-radius: 4px; background: var(--bg); cursor: pointer;
   font: 600 1rem var(--font-display); letter-spacing: .03em; }
 .seg button[aria-pressed="true"] { background: var(--ink); color: var(--panel); border-color: var(--ink); }
-.pf[hidden] { display: none; }
+.seg button:disabled { cursor: not-allowed; opacity: .45; }
+.pf .note { margin-top: 6px; }
 .note { font-size: .9rem; color: var(--muted); margin: 0; }
 .hhf-line { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
 .hhf-line strong { font: 500 1.4rem var(--font-num); }
@@ -227,12 +228,13 @@ footer a { color: inherit; }
             <div class="seg" id="divs">${state.data.divisions.map((d) =>
               `<button type="button" data-div="${d.id}" aria-pressed="${d.id === state.division}">${esc(d.name)}</button>`).join("")}</div>
           </div>
-          <div class="pf" ${div.major ? "" : "hidden"}>
+          <div class="pf">
             <div class="label">Power factor</div>
             <div class="seg" id="pfs">
-              <button type="button" data-pf="minor" aria-pressed="${state.pf === "minor"}">Minor</button>
-              <button type="button" data-pf="major" aria-pressed="${state.pf === "major"}">Major</button>
+              <button type="button" data-pf="minor" aria-pressed="${pf() === "minor"}" ${div.major ? "" : "disabled"}>Minor</button>
+              <button type="button" data-pf="major" aria-pressed="${pf() === "major"}" ${div.major ? "" : "disabled"}>Major</button>
             </div>
+            ${div.major ? "" : `<p class="note">${esc(div.name)} scores Minor only.</p>`}
           </div>
           ${hhfBlock(c, div)}
           <div id="classes"></div>
