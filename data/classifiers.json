@@ -15,7 +15,7 @@
     {
       "id": "limited-optics",
       "name": "Limited Optics",
-      "major": true
+      "major": false
     },
     {
       "id": "carry-optics",
