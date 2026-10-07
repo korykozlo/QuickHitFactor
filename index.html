@@ -227,7 +227,7 @@ footer a { color: inherit; }
           <div>
             <div class="label">Division</div>
             <div class="seg" id="divs">${state.data.divisions.map((d) =>
-              `<button type="button" data-div="${d.id}" aria-pressed="${d.id === state.division}">${esc(d.name)}</button>`).join("")}</div>
+              `<button type="button" data-div="${d.id}" aria-pressed="${d.id === state.division}" title="${esc(d.name)}">${esc(d.short || d.name)}</button>`).join("")}</div>
           </div>
           <div class="pf">
             <div class="label">Power factor</div>
@@ -261,8 +261,8 @@ footer a { color: inherit; }
         <div class="hhf-line"><strong>${c.hhf[state.division].toFixed(4)}</strong></div></div>`;
     }
     const saved = state.customHHF[c.code + "/" + state.division] ?? "";
-    const why = c.trial
-      ? "This is a trial classifier. USPSA hasn't set high hit factors for it yet."
+    const why = div.hhfNote ? div.hhfNote
+      : c.trial ? "This is a trial classifier. USPSA hasn't set high hit factors for it yet."
       : "This classifier's high hit factors aren't in USPSA's published HHF tables yet.";
     return `<div><div class="label">High hit factor · ${esc(div.name)}</div>
       <p class="note">${why} Enter one to run the numbers.</p>

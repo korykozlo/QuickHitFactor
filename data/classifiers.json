@@ -13,6 +13,13 @@
       "major": true
     },
     {
+      "id": "limited-10",
+      "name": "Limited-10",
+      "short": "L-10",
+      "major": true,
+      "hhfNote": "USPSA hasn't published Limited-10 high hit factors yet. The division is in a provisional period while USPSA collects scores under the current rules."
+    },
+    {
       "id": "limited-optics",
       "name": "Limited Optics",
       "major": false
