@@ -1,0 +1,336 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>QuickHitFactor</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Source+Sans+3:wght@400;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: classifier rail on the left, stage sheet on the right; stacks to one column on phones. */
+:root {
+  --bg: #eef0f2;          /* range-day slate paper */
+  --panel: #ffffff;
+  --ink: #1b2229;
+  --muted: #5b6672;
+  --line: #d5dae0;
+  --tan: #b98a4e;         /* cardboard target */
+  --tan-soft: #f3e7d6;
+  --steel: #2f5d84;       /* popper steel */
+  --steel-soft: #dfe9f2;
+  --miss: #b23a2e;
+  --font-display: "Barlow Condensed", "Arial Narrow", system-ui, sans-serif;
+  --font-body: "Source Sans 3", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-num: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #12171c; --panel: #1a2128; --ink: #e6eaee; --muted: #9aa5b1; --line: #2c3640;
+    --tan: #d4a566; --tan-soft: #3a2f22; --steel: #7fb0da; --steel-soft: #1f3142; --miss: #e0786c;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #12171c; --panel: #1a2128; --ink: #e6eaee; --muted: #9aa5b1; --line: #2c3640;
+  --tan: #d4a566; --tan-soft: #3a2f22; --steel: #7fb0da; --steel-soft: #1f3142; --miss: #e0786c;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body { background: var(--bg); color: var(--ink); font: 16px/1.5 var(--font-body); }
+button, input, select { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--steel); outline-offset: 2px; }
+
+.app { display: grid; grid-template-columns: minmax(260px, 320px) minmax(0, 1fr); gap: 24px;
+  max-width: 1280px; margin: 0 auto; padding-inline: 16px; padding-block: 20px 40px; }
+header.brand { grid-column: 1 / -1; display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+header.brand h1 { font: 700 2rem/1 var(--font-display); letter-spacing: .02em; margin: 0; text-transform: uppercase; }
+header.brand h1 span { color: var(--tan); }
+header.brand p { margin: 0; color: var(--muted); }
+
+/* Classifier rail */
+.rail { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 12px); align-self: start;
+  max-height: calc(100vh - 24px); display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.rail input { width: 100%; padding: 10px 12px; border: 1px solid var(--line); border-radius: 6px; background: var(--panel); }
+.rail ul { list-style: none; margin: 0; padding: 0; overflow-y: auto; border: 1px solid var(--line);
+  border-radius: 6px; background: var(--panel); }
+.rail li button { width: 100%; display: grid; grid-template-columns: 4.2em 1fr auto; gap: 8px; align-items: baseline;
+  padding: 8px 12px; border: 0; border-bottom: 1px solid var(--line); background: none; text-align: left; cursor: pointer; }
+.rail li:last-child button { border-bottom: 0; }
+.rail li button:hover { background: var(--bg); }
+.rail li button[aria-current="true"] { background: var(--tan-soft); }
+.rail .code { font: 500 .9rem var(--font-num); color: var(--muted); }
+.rail .tag { font-size: .7rem; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); }
+
+/* Stage sheet */
+main { min-width: 0; display: flex; flex-direction: column; gap: 20px; }
+.sheet-head { display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: 12px; }
+.sheet-head h2 { margin: 0; font: 700 2.4rem/1 var(--font-display); text-wrap: balance; }
+.sheet-head h2 .code { color: var(--tan); margin-right: .3em; }
+.facts { display: flex; flex-wrap: wrap; gap: 8px; margin: 8px 0 0; padding: 0; list-style: none; }
+.facts li { font-size: .85rem; padding: 2px 10px; border-radius: 999px; background: var(--panel); border: 1px solid var(--line); }
+.facts li.steel { background: var(--steel-soft); border-color: transparent; }
+.sheet-head a { color: var(--steel); font-weight: 600; }
+
+.grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); gap: 20px; align-items: start; }
+figure { margin: 0; background: #fff; border: 1px solid var(--line); border-radius: 6px; overflow: hidden; }
+figure img { display: block; width: 100%; height: auto; }
+figure figcaption { padding: 6px 10px; font-size: .78rem; color: #5b6672; background: #fff; border-top: 1px solid #d5dae0; }
+
+.panel { background: var(--panel); border: 1px solid var(--line); border-radius: 6px; padding: 16px; display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+.label { font: 600 .75rem var(--font-body); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.seg { display: flex; flex-wrap: wrap; gap: 6px; }
+.seg button { padding: 6px 12px; border: 1px solid var(--line); border-radius: 4px; background: var(--bg); cursor: pointer;
+  font: 600 1rem var(--font-display); letter-spacing: .03em; }
+.seg button[aria-pressed="true"] { background: var(--ink); color: var(--panel); border-color: var(--ink); }
+.seg button:disabled { cursor: not-allowed; opacity: .45; }
+.pf .note { margin-top: 6px; }
+.note { font-size: .9rem; color: var(--muted); margin: 0; }
+.hhf-line { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+.hhf-line strong { font: 500 1.4rem var(--font-num); }
+.hhf-line input { width: 8em; padding: 6px 8px; border: 1px solid var(--line); border-radius: 4px; background: var(--bg); font-family: var(--font-num); }
+
+table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+th, td { padding: 6px 10px; text-align: right; border-bottom: 1px solid var(--line); white-space: nowrap; }
+th { font: 600 .75rem var(--font-body); letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+th:first-child, td:first-child { text-align: left; }
+td { font-family: var(--font-num); font-size: .95rem; }
+.classes tbody tr { cursor: pointer; }
+.classes tbody tr:hover { background: var(--bg); }
+.classes tbody tr[aria-selected="true"] { background: var(--tan-soft); }
+.classes td:first-child { font: 700 1.2rem var(--font-display); }
+.scroll { overflow-x: auto; }
+
+.combos { display: flex; flex-direction: column; gap: 10px; }
+.combos-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 10px; }
+.combos-head h3 { margin: 0; font: 700 1.5rem var(--font-display); }
+.combos-head select { padding: 6px 8px; border: 1px solid var(--line); border-radius: 4px; background: var(--bg); }
+.combo-table { max-height: 520px; overflow: auto; border: 1px solid var(--line); border-radius: 6px; }
+.combo-table thead th { position: sticky; top: 0; background: var(--panel); }
+.combo-table td.m { color: var(--miss); }
+.combo-table td.time { font-weight: 500; }
+.zero { color: var(--muted); opacity: .55; }
+.empty { padding: 24px; text-align: center; color: var(--muted); }
+
+footer { grid-column: 1 / -1; font-size: .8rem; color: var(--muted); }
+footer a { color: inherit; }
+
+@media (max-width: 900px) {
+  .app { grid-template-columns: minmax(0, 1fr); }
+  .rail { position: static; max-height: none; }
+  .rail ul { max-height: 260px; }
+  .grid { grid-template-columns: minmax(0, 1fr); }
+}
+@media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; } }
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="brand">
+    <h1>Quick<span>Hit</span>Factor</h1>
+    <p>What it takes to make each class on every active USPSA classifier.</p>
+  </header>
+
+  <nav class="rail" aria-label="Classifiers">
+    <input id="search" type="search" placeholder="Search number or name" aria-label="Search classifiers">
+    <ul id="list"></ul>
+  </nav>
+
+  <main id="main">
+    <p class="empty">Loading classifiers…</p>
+  </main>
+
+  <footer id="footer"></footer>
+</div>
+
+<script src="calc.js"></script>
+<script>
+(function () {
+  const $ = (s, el = document) => el.querySelector(s);
+  const esc = (s) => String(s).replace(/[&<>"]/g, (ch) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[ch]));
+  const state = { data: null, code: null, division: "carry-optics", pf: "minor", cls: "A", misses: "0", customHHF: {} };
+
+  fetch("data/classifiers.json").then((r) => r.json()).then((data) => {
+    state.data = data;
+    const fromHash = location.hash.slice(1);
+    state.code = data.classifiers.some((c) => c.code === fromHash) ? fromHash : "99-11";
+    renderList();
+    render();
+    $("#footer").innerHTML =
+      `Stage sheets and diagrams © USPSA, from <a href="${esc(data.source)}" target="_blank" rel="noopener">uspsa.org/classifiers</a>. ` +
+      `High hit factors from USPSA's <a href="${esc(data.hhfSource)}" target="_blank" rel="noopener">2025 High Hit Factor tables</a>. ` +
+      `Retrieved ${esc(data.retrieved)}. Always confirm against USPSA before relying on a number.`;
+  }).catch(() => {
+    $("#main").innerHTML = `<p class="empty">Couldn't load the classifier data. Reload the page to try again.</p>`;
+  });
+
+  $("#search").addEventListener("input", renderList);
+  window.addEventListener("hashchange", () => {
+    const c = location.hash.slice(1);
+    if (state.data && c !== state.code && state.data.classifiers.some((x) => x.code === c)) { state.code = c; renderList(); render(); }
+  });
+
+  function sortKey(code) { // 99-xx series is the oldest, so it sorts first
+    const [y, n] = code.split("-").map(Number);
+    return (y === 99 ? -1 : y) * 100 + n;
+  }
+
+  function renderList() {
+    const q = $("#search").value.trim().toLowerCase();
+    const items = state.data.classifiers
+      .filter((c) => !q || c.code.includes(q) || c.name.toLowerCase().includes(q))
+      .sort((a, b) => sortKey(a.code) - sortKey(b.code));
+    $("#list").innerHTML = items.length ? items.map((c) => `
+      <li><button type="button" data-code="${c.code}" aria-current="${c.code === state.code}">
+        <span class="code">${c.code}</span><span>${esc(c.name)}</span>
+        <span class="tag">${c.trial ? "trial" : !Object.keys(c.hhf).length ? "no HHF" : ""}</span>
+      </button></li>`).join("") : `<li class="empty">No classifier matches “${esc(q)}”.</li>`;
+    $("#list").querySelectorAll("button").forEach((b) => b.addEventListener("click", () => {
+      state.code = b.dataset.code;
+      history.replaceState(null, "", "#" + state.code);
+      renderList(); render();
+      if (window.matchMedia("(max-width: 900px)").matches) $("#main").scrollIntoView();
+    }));
+  }
+
+  function current() { return state.data.classifiers.find((c) => c.code === state.code); }
+  function division() { return state.data.divisions.find((d) => d.id === state.division); }
+  function hhf(c) { return c.hhf[state.division] ?? state.customHHF[c.code + "/" + state.division] ?? null; }
+  function pf() { return division().major ? state.pf : "minor"; }
+
+  function render() {
+    const c = current();
+    const div = division();
+    const paper = c.rounds - c.steel;
+    $("#main").innerHTML = `
+      <div class="sheet-head">
+        <div>
+          <h2><span class="code">${c.code}</span>${esc(c.name)}</h2>
+          <ul class="facts">
+            <li>${c.scoring === "Virginia" ? "Virginia Count" : "Comstock"}</li>
+            <li>${c.rounds} scoring hits · ${c.points} points</li>
+            ${c.steel ? `<li class="steel">${c.steel} steel · ${paper} paper hits</li>` : ""}
+            ${c.trial ? `<li>Trial classifier</li>` : ""}
+          </ul>
+        </div>
+        <a href="${esc(c.pdf)}" target="_blank" rel="noopener">Full stage sheet (PDF)</a>
+      </div>
+      <div class="grid">
+        <figure>
+          <a href="${esc(c.diagram)}" target="_blank" rel="noopener"><img src="${esc(c.diagram)}" alt="Stage diagram for ${c.code} ${esc(c.name)}" width="935" height="1210"></a>
+          <figcaption>Stage sheet © USPSA · tap to enlarge</figcaption>
+        </figure>
+        <div class="panel">
+          <div>
+            <div class="label">Division</div>
+            <div class="seg" id="divs">${state.data.divisions.map((d) =>
+              `<button type="button" data-div="${d.id}" aria-pressed="${d.id === state.division}">${esc(d.name)}</button>`).join("")}</div>
+          </div>
+          <div class="pf">
+            <div class="label">Power factor</div>
+            <div class="seg" id="pfs">
+              <button type="button" data-pf="minor" aria-pressed="${pf() === "minor"}" ${div.major ? "" : "disabled"}>Minor</button>
+              <button type="button" data-pf="major" aria-pressed="${pf() === "major"}" ${div.major ? "" : "disabled"}>Major</button>
+            </div>
+            ${div.major ? "" : `<p class="note">${esc(div.name)} scores Minor only.</p>`}
+          </div>
+          ${hhfBlock(c, div)}
+          <div id="classes"></div>
+        </div>
+      </div>
+      <section class="combos panel" id="combos"></section>`;
+
+    $("#divs").querySelectorAll("button").forEach((b) => b.addEventListener("click", () => { state.division = b.dataset.div; render(); }));
+    $("#pfs").querySelectorAll("button").forEach((b) => b.addEventListener("click", () => { state.pf = b.dataset.pf; render(); }));
+    const hin = $("#hhf-input");
+    if (hin) hin.addEventListener("input", () => {
+      const v = parseFloat(hin.value);
+      const key = c.code + "/" + state.division;
+      if (v > 0) state.customHHF[key] = v; else delete state.customHHF[key];
+      renderTables();
+    });
+    renderTables();
+  }
+
+  function hhfBlock(c, div) {
+    if (c.hhf[state.division] != null) {
+      return `<div><div class="label">High hit factor · ${esc(div.name)}</div>
+        <div class="hhf-line"><strong>${c.hhf[state.division].toFixed(4)}</strong></div></div>`;
+    }
+    const saved = state.customHHF[c.code + "/" + state.division] ?? "";
+    const why = c.trial
+      ? "This is a trial classifier. USPSA hasn't set high hit factors for it yet."
+      : "This classifier's high hit factors aren't in USPSA's published HHF tables yet.";
+    return `<div><div class="label">High hit factor · ${esc(div.name)}</div>
+      <p class="note">${why} Enter one to run the numbers.</p>
+      <div class="hhf-line"><input id="hhf-input" type="number" step="0.0001" min="0" inputmode="decimal" placeholder="e.g. 9.5000" value="${saved}" aria-label="High hit factor"></div></div>`;
+  }
+
+  function renderTables() {
+    const c = current();
+    const h = hhf(c);
+    if (!h) {
+      $("#classes").innerHTML = "";
+      $("#combos").innerHTML = `<p class="empty">Class targets appear here once there's a high hit factor.</p>`;
+      return;
+    }
+    const best = c.points;
+    $("#classes").innerHTML = `<div class="scroll"><table class="classes">
+      <thead><tr><th>Class</th><th>Score</th><th>Min HF</th><th>Time at all A</th></tr></thead>
+      <tbody>${state.data.classes.map((k) => {
+        const next = state.data.classes[state.data.classes.indexOf(k) - 1];
+        if (k.min === 0) {
+          return `<tr data-cls="D" aria-selected="${state.cls === "D"}"><td>D</td><td>under ${next.min}%</td><td>–</td><td>–</td></tr>`;
+        }
+        const mhf = QHF.minHitFactor(h, k.min);
+        const t = QHF.maxTime(best, mhf);
+        return `<tr data-cls="${k.id}" aria-selected="${state.cls === k.id}"><td>${k.id}</td>
+          <td>${k.min}%${next ? `–${next.min}%` : "+"}</td><td>${mhf.toFixed(4)}</td><td>${t.toFixed(2)}s</td></tr>`;
+      }).join("")}</tbody></table></div>
+      <p class="note">Pick a class to see every hit combination that makes it.</p>`;
+    $("#classes").querySelectorAll("tbody tr").forEach((tr) => tr.addEventListener("click", () => {
+      state.cls = tr.dataset.cls; renderTables();
+      $("#combos").scrollIntoView({ block: "nearest" });
+    }));
+    renderCombos(c, h);
+  }
+
+  function renderCombos(c, h) {
+    const k = state.data.classes.find((x) => x.id === state.cls);
+    const box = $("#combos");
+    if (k.min === 0) {
+      box.innerHTML = `<div class="combos-head"><h3>D class</h3></div>
+        <p class="note">Any score below ${state.data.classes.at(-2).min}% of the high hit factor lands in D, so there's no time to beat.</p>`;
+      return;
+    }
+    const mhf = QHF.minHitFactor(h, k.min);
+    const all = QHF.combinations(c.rounds, c.steel, pf());
+    const rows = all.filter((r) => state.misses === "all" || r.m <= Number(state.misses));
+    const v = QHF.POINTS[pf()];
+    const cell = (n, cls = "") => `<td class="${n ? cls : "zero"}">${n}</td>`;
+    box.innerHTML = `
+      <div class="combos-head">
+        <h3>${k.id} on ${c.code} · ${esc(division().name)}${division().major ? ` ${pf() === "major" ? "Major" : "Minor"}` : ""}</h3>
+        <label class="note">Misses
+          <select id="misses">
+            ${["0", "1", "2", "3", "all"].map((m) => `<option value="${m}" ${state.misses === m ? "selected" : ""}>${m === "all" ? "Any number" : m === "0" ? "None" : "Up to " + m}</option>`).join("")}
+          </select>
+        </label>
+      </div>
+      <p class="note">Hit factor ${mhf.toFixed(4)} or better. A = ${v.A}, C = ${v.C}, D = ${v.D}, miss = −10.
+        ${c.steel ? `${c.steel} of the ${c.rounds} hits are steel, which score as an A or a miss.` : ""}
+        Times are the slowest that still make ${k.id}. No-shoots and procedurals aren't counted.</p>
+      <div class="combo-table"><table>
+        <thead><tr><th>A</th><th>C</th><th>D</th><th>Miss</th><th>Points</th><th>Max time</th></tr></thead>
+        <tbody>${rows.map((r) => `<tr>${cell(r.a)}${cell(r.c)}${cell(r.d)}${cell(r.m, "m")}
+          <td>${r.points}</td><td class="time">${QHF.maxTime(r.points, mhf).toFixed(2)}s</td></tr>`).join("")}</tbody>
+      </table></div>
+      <p class="note">${rows.length.toLocaleString()} of ${all.length.toLocaleString()} combinations shown.</p>`;
+    $("#misses").addEventListener("change", (e) => { state.misses = e.target.value; renderCombos(c, h); });
+  }
+})();
+</script>
+</body>
+</html>
