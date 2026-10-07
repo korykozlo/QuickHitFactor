@@ -84,6 +84,9 @@ def main(pdf_dir, report):
         c["points"] = hits * 5
         c["steel"] = steel
         c["hhf"] = hhfs.get(code, {})
+        # USPSA scores Limited-10 classifiers against the Limited HHFs.
+        if "limited" in c["hhf"]:
+            c["hhf"]["limited-10"] = c["hhf"]["limited"]
         c["trial"] = code.startswith("26-")
         c["pdf"] = f"https://uspsa.org/resources/classifiers/{code}.pdf"
         c["diagram"] = f"diagrams/{code}.webp"
