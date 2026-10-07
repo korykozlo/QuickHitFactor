@@ -1,0 +1,686 @@
+{
+  "source": "https://uspsa.org/classifiers",
+  "retrieved": "2026-10-07",
+  "divisions": [
+    {
+      "id": "open",
+      "name": "Open",
+      "major": true
+    },
+    {
+      "id": "limited",
+      "name": "Limited",
+      "major": true
+    },
+    {
+      "id": "limited-optics",
+      "name": "Limited Optics",
+      "major": true
+    },
+    {
+      "id": "carry-optics",
+      "name": "Carry Optics",
+      "major": false
+    },
+    {
+      "id": "production",
+      "name": "Production",
+      "major": false
+    },
+    {
+      "id": "single-stack",
+      "name": "Single Stack",
+      "major": true
+    },
+    {
+      "id": "revolver",
+      "name": "Revolver",
+      "major": true
+    },
+    {
+      "id": "pcc",
+      "name": "PCC",
+      "major": false
+    }
+  ],
+  "classes": [
+    {
+      "id": "GM",
+      "min": 95
+    },
+    {
+      "id": "M",
+      "min": 85
+    },
+    {
+      "id": "A",
+      "min": 75
+    },
+    {
+      "id": "B",
+      "min": 60
+    },
+    {
+      "id": "C",
+      "min": 40
+    },
+    {
+      "id": "D",
+      "min": 0
+    }
+  ],
+  "classifiers": [
+    {
+      "code": "03-03",
+      "name": "Take em Down",
+      "diagram": "https://uspsa.org/resources/classifiers/covers/03-03.png",
+      "pdf": "https://uspsa.org/viewer/03-03.pdf",
+      "rounds": null,
+      "scoring": null,
+      "hhf": {}
+    },
+    {
+      "code": "03-05",
+      "name": "Paper Poppers",
+      "diagram": "https://uspsa.org/resources/classifiers/covers/03-05.png",
+      "pdf": "https://uspsa.org/viewer/03-05.pdf",
+      "rounds": null,
+      "scoring": null,
+      "hhf": {}
+    },
+    {
+      "code": "03-07",
+      "name": "Riverdale Standards",
+      "diagram": "https://uspsa.org/resources/classifiers/covers/03-07.png",
+      "pdf": "https://uspsa.org/viewer/03-07.pdf",
+      "rounds": null,
+      "scoring": null,
+      "hhf": {}
+    },
+    {
+      "code": "03-08",
+      "name": "Madness",
+      "diagram": "https://uspsa.org/resources/classifiers/covers/03-08.png",
+      "pdf": "https://uspsa.org/viewer/03-08.pdf",
+      "rounds": null,
+      "scoring": null,
+      "hhf": {}
+    },
+    {
+      "code": "03-09",
+      "name": "On the Move",
+      "diagram": "https://uspsa.org/resources/classifiers/covers/03-09.png",
+      "pdf": "https://uspsa.org/viewer/03-09.pdf",
+      "rounds": null,
+      "scoring": null,
+      "hhf": {}
+    },
+    {
+      "code": "03-18",
+      "name": "High Standards",
+      "diagram": "https://uspsa.org/resources/classifiers/covers/03-18.png",
+      "pdf": "https://uspsa.org/viewer/03-18.pdf",
+      "rounds": null,
+      "scoring": null,
+      "hhf": {}
+    },
+    {
+      "code": "06-03",
+      "name": "Can You Count",
+      "diagram": "https://uspsa.org/resources/classifiers/covers/06-03.png",
+      "pdf": "https://uspsa.org/viewer/06-03.pdf",
+      "rounds": null,
+      "scoring": null,
+      "hhf": {}
+    },
+    {
+      "code": "06-04",
+      "name": "Fluffy's Revenge 1",
+      "diagram": "https://uspsa.org/resources/classifiers/covers/06-04.png",
+      "pdf": "https://uspsa.org/viewer/06-04.pdf",
+      "rounds": null,
+      "scoring": null,
+      "hhf": {}
+    },
+    {
+      "code": "06-05",
+      "name": "Fluffy's Revenge 2",
+      "diagram": "https://uspsa.org/resources/classifiers/covers/06-05.png",
+      "pdf": "https://uspsa.org/viewer/06-05.pdf",
+      "rounds": null,
+      "scoring": null,
+      "hhf": {}
+    },
+    {
+      "code": "06-10",
+      "name": "Steely Speed VII",
+      "diagram": "https://uspsa.org/resources/classifiers/covers/06-10.png",
+      "pdf": "https://uspsa.org/viewer/06-10.pdf",
+      "rounds": null,
+      "scoring": null,
+      "hhf": {}
+    },
+    {
+      "code": "08-02",
+      "name": "Steeler Standards",
+      "diagram": "https://uspsa.org/resources/classifiers/covers/08-02.png",
+      "pdf": "https://uspsa.org/viewer/08-02.pdf",
+      "rounds": null,
+      "scoring": null,
+      "hhf": {}
+    },
+    {
+      "code": "08-03",
+      "name": "Six",
+      "diagram": "https://uspsa.org/resources/classifiers/covers/08-03.png",
+      "pdf": "https://uspsa.org/viewer/08-03.pdf",
+      "rounds": null,
+      "scoring": null,
+      "hhf": {}
+    },
+    {
+      "code": "09-10",
+      "name": "Life's Little Problems",
+      "diagram": "https://uspsa.org/resources/classifiers/covers/09-10.png",
+      "pdf": "https://uspsa.org/viewer/09-10.pdf",
+      "rounds": null,
+      "scoring": null,
+      "hhf": {}
+    },
+    {
+      "code": "13-02",
+      "name": "Down The Middle",
+      "diagram": "https://uspsa.org/resources/classifiers/covers/13-02.png",
+      "pdf": "https://uspsa.org/viewer/13-02.pdf",
+      "rounds": null,
+      "scoring": null,
+      "hhf": {}
+    },
+    {
+      "code": "13-04",
+      "name": "The Roscoe Rattle",
+      "diagram": "https://uspsa.org/resources/classifiers/covers/13-04.png",
+      "pdf": "https://uspsa.org/viewer/13-04.pdf",
+      "rounds": null,
+      "scoring": null,
+      "hhf": {}
+    },
+    {
+      "code": "13-05",
+      "name": "Tick Tock",
+      "diagram": "https://uspsa.org/resources/classifiers/covers/13-05.png",
+      "pdf": "https://uspsa.org/viewer/13-05.pdf",
+      "rounds": null,
+      "scoring": null,
+      "hhf": {}
+    },
+    {
+      "code": "13-06",
+      "name": "Too Close For Comfort",
+      "diagram": "https://uspsa.org/resources/classifiers/covers/13-06.png",
+      "pdf": "https://uspsa.org/viewer/13-06.pdf",
+      "rounds": null,
+      "scoring": null,
+      "hhf": {}
+    },
+    {
+      "code": "18-03",
+      "name": "We Play Games",
+      "diagram": "https://uspsa.org/resources/classifiers/covers/18-03.png",
+      "pdf": "https://uspsa.org/viewer/18-03.pdf",
+      "rounds": null,
+      "scoring": null,
+      "hhf": {}
+    },
+    {
+      "code": "18-05",
+      "name": "No Need To Believe In Either Side",
+      "diagram": "https://uspsa.org/resources/classifiers/covers/18-05.png",
+      "pdf": "https://uspsa.org/viewer/18-05.pdf",
+      "rounds": null,
+      "scoring": null,
+      "hhf": {}
+    },
+    {
+      "code": "18-07",
+      "name": "Someone Is Always Willing To Pay",
+      "diagram": "https://uspsa.org/resources/classifiers/covers/18-07.png",
+      "pdf": "https://uspsa.org/viewer/18-07.pdf",
+      "rounds": null,
+      "scoring": null,
+      "hhf": {}
+    },
+    {
+      "code": "18-08",
+      "name": "The Condor",
+      "diagram": "https://uspsa.org/resources/classifiers/covers/18-08.png",
+      "pdf": "https://uspsa.org/viewer/18-08.pdf",
+      "rounds": null,
+      "scoring": null,
+      "hhf": {}
+    },
+    {
+      "code": "18-09",
+      "name": "I Miss That Kind of Clarity",
+      "diagram": "https://uspsa.org/resources/classifiers/covers/18-09.png",
+      "pdf": "https://uspsa.org/viewer/18-09.pdf",
+      "rounds": null,
+      "scoring": null,
+      "hhf": {}
+    },
+    {
+      "code": "19-01",
+      "name": "HI-Jinx",
+      "diagram": "https://uspsa.org/resources/classifiers/covers/19-01.png",
+      "pdf": "https://uspsa.org/viewer/19-01.pdf",
+      "rounds": null,
+      "scoring": null,
+      "hhf": {}
+    },
+    {
+      "code": "19-02",
+      "name": "HI-Way Robbery",
+      "diagram": "https://uspsa.org/resources/classifiers/covers/19-02.png",
+      "pdf": "https://uspsa.org/viewer/19-02.pdf",
+      "rounds": null,
+      "scoring": null,
+      "hhf": {}
+    },
+    {
+      "code": "19-04",
+      "name": "HI Cost of Living",
+      "diagram": "https://uspsa.org/resources/classifiers/covers/19-04.png",
+      "pdf": "https://uspsa.org/viewer/19-04.pdf",
+      "rounds": null,
+      "scoring": null,
+      "hhf": {}
+    },
+    {
+      "code": "20-01",
+      "name": "Wish You Were Here",
+      "diagram": "https://uspsa.org/resources/classifiers/covers/20-01.png",
+      "pdf": "https://uspsa.org/viewer/20-01.pdf",
+      "rounds": null,
+      "scoring": null,
+      "hhf": {}
+    },
+    {
+      "code": "20-02",
+      "name": "Deja Vu",
+      "diagram": "https://uspsa.org/resources/classifiers/covers/20-02.png",
+      "pdf": "https://uspsa.org/viewer/20-02.pdf",
+      "rounds": null,
+      "scoring": null,
+      "hhf": {}
+    },
+    {
+      "code": "20-03",
+      "name": "Deja Vu All Over Again",
+      "diagram": "https://uspsa.org/resources/classifiers/covers/20-03.png",
+      "pdf": "https://uspsa.org/viewer/20-03.pdf",
+      "rounds": null,
+      "scoring": null,
+      "hhf": {}
+    },
+    {
+      "code": "21-01",
+      "name": "8 x 3 Trigger Freeze",
+      "diagram": "https://uspsa.org/resources/classifiers/covers/21-01.png",
+      "pdf": "https://uspsa.org/viewer/21-01.pdf",
+      "rounds": null,
+      "scoring": null,
+      "hhf": {}
+    },
+    {
+      "code": "22-01",
+      "name": "Righty Tighty",
+      "diagram": "https://uspsa.org/resources/classifiers/covers/22-01.png",
+      "pdf": "https://uspsa.org/viewer/22-01.pdf",
+      "rounds": null,
+      "scoring": null,
+      "hhf": {}
+    },
+    {
+      "code": "22-02",
+      "name": "Lefty Loosey",
+      "diagram": "https://uspsa.org/resources/classifiers/covers/22-02.png",
+      "pdf": "https://uspsa.org/viewer/22-02.pdf",
+      "rounds": null,
+      "scoring": null,
+      "hhf": {}
+    },
+    {
+      "code": "22-04",
+      "name": "Calm Before the Storm",
+      "diagram": "https://uspsa.org/resources/classifiers/covers/22-04.png",
+      "pdf": "https://uspsa.org/viewer/22-04.pdf",
+      "rounds": null,
+      "scoring": null,
+      "hhf": {}
+    },
+    {
+      "code": "22-06",
+      "name": "Blues Don't Care",
+      "diagram": "https://uspsa.org/resources/classifiers/covers/22-06.png",
+      "pdf": "https://uspsa.org/viewer/22-06.pdf",
+      "rounds": null,
+      "scoring": null,
+      "hhf": {}
+    },
+    {
+      "code": "22-07",
+      "name": "Cross Road Blues",
+      "diagram": "https://uspsa.org/resources/classifiers/covers/22-07.png",
+      "pdf": "https://uspsa.org/viewer/22-07.pdf",
+      "rounds": null,
+      "scoring": null,
+      "hhf": {}
+    },
+    {
+      "code": "23-01",
+      "name": "THS Short Course",
+      "diagram": "https://uspsa.org/resources/classifiers/covers/23-01.png",
+      "pdf": "https://uspsa.org/viewer/23-01.pdf",
+      "rounds": null,
+      "scoring": null,
+      "hhf": {}
+    },
+    {
+      "code": "23-02",
+      "name": "This could be the Greatest Night of Our Lives",
+      "diagram": "https://uspsa.org/resources/classifiers/covers/23-02.png",
+      "pdf": "https://uspsa.org/viewer/23-02.pdf",
+      "rounds": null,
+      "scoring": null,
+      "hhf": {}
+    },
+    {
+      "code": "24-01",
+      "name": "Can you Strong and Weak Hand?",
+      "diagram": "https://uspsa.org/resources/classifiers/covers/24-01.png",
+      "pdf": "https://uspsa.org/viewer/24-01.pdf",
+      "rounds": null,
+      "scoring": null,
+      "hhf": {}
+    },
+    {
+      "code": "24-02",
+      "name": "This is more better now",
+      "diagram": "https://uspsa.org/resources/classifiers/covers/24-02.png",
+      "pdf": "https://uspsa.org/viewer/24-02.pdf",
+      "rounds": null,
+      "scoring": null,
+      "hhf": {}
+    },
+    {
+      "code": "24-04",
+      "name": "The Thrill of the Bill Drill",
+      "diagram": "https://uspsa.org/resources/classifiers/covers/24-04.png",
+      "pdf": "https://uspsa.org/viewer/24-04.pdf",
+      "rounds": null,
+      "scoring": null,
+      "hhf": {}
+    },
+    {
+      "code": "24-06",
+      "name": "Surely you can't be serious",
+      "diagram": "https://uspsa.org/resources/classifiers/covers/24-06.png",
+      "pdf": "https://uspsa.org/viewer/24-06.pdf",
+      "rounds": null,
+      "scoring": null,
+      "hhf": {}
+    },
+    {
+      "code": "24-08",
+      "name": "And now for something completely different",
+      "diagram": "https://uspsa.org/resources/classifiers/covers/24-08.png",
+      "pdf": "https://uspsa.org/viewer/24-08.pdf",
+      "rounds": null,
+      "scoring": null,
+      "hhf": {}
+    },
+    {
+      "code": "24-09",
+      "name": "Tres Cajas",
+      "diagram": "https://uspsa.org/resources/classifiers/covers/24-09.png",
+      "pdf": "https://uspsa.org/viewer/24-09.pdf",
+      "rounds": null,
+      "scoring": null,
+      "hhf": {}
+    },
+    {
+      "code": "25-01",
+      "name": "Return to Monke",
+      "diagram": "https://uspsa.org/resources/classifiers/covers/25-01.png",
+      "pdf": "https://uspsa.org/viewer/25-01.pdf",
+      "rounds": null,
+      "scoring": null,
+      "hhf": {}
+    },
+    {
+      "code": "25-02",
+      "name": "Look at Me I Am the Captain Now",
+      "diagram": "https://uspsa.org/resources/classifiers/covers/25-02.png",
+      "pdf": "https://uspsa.org/viewer/25-02.pdf",
+      "rounds": null,
+      "scoring": null,
+      "hhf": {}
+    },
+    {
+      "code": "25-03",
+      "name": "Let Him Cook",
+      "diagram": "https://uspsa.org/resources/classifiers/covers/25-03.png",
+      "pdf": "https://uspsa.org/viewer/25-03.pdf",
+      "rounds": null,
+      "scoring": null,
+      "hhf": {}
+    },
+    {
+      "code": "25-04",
+      "name": "We Did Our Homework",
+      "diagram": "https://uspsa.org/resources/classifiers/covers/25-04.png",
+      "pdf": "https://uspsa.org/viewer/25-04.pdf",
+      "rounds": null,
+      "scoring": null,
+      "hhf": {}
+    },
+    {
+      "code": "25-05",
+      "name": "Its All Porta the Plan",
+      "diagram": "https://uspsa.org/resources/classifiers/covers/25-05.png",
+      "pdf": "https://uspsa.org/viewer/25-05.pdf",
+      "rounds": null,
+      "scoring": null,
+      "hhf": {}
+    },
+    {
+      "code": "25-06",
+      "name": "They All Count",
+      "diagram": "https://uspsa.org/resources/classifiers/covers/25-06.png",
+      "pdf": "https://uspsa.org/viewer/25-06.pdf",
+      "rounds": null,
+      "scoring": null,
+      "hhf": {}
+    },
+    {
+      "code": "25-07",
+      "name": "Absolute Cinema",
+      "diagram": "https://uspsa.org/resources/classifiers/covers/25-07.png",
+      "pdf": "https://uspsa.org/viewer/25-07.pdf",
+      "rounds": null,
+      "scoring": null,
+      "hhf": {}
+    },
+    {
+      "code": "25-08",
+      "name": "We Lost Hero or Zero",
+      "diagram": "https://uspsa.org/resources/classifiers/covers/25-08.png",
+      "pdf": "https://uspsa.org/viewer/25-08.pdf",
+      "rounds": null,
+      "scoring": null,
+      "hhf": {}
+    },
+    {
+      "code": "25-09",
+      "name": "Descent Into Madness",
+      "diagram": "https://uspsa.org/resources/classifiers/covers/25-09.png",
+      "pdf": "https://uspsa.org/viewer/25-09.pdf",
+      "rounds": null,
+      "scoring": null,
+      "hhf": {}
+    },
+    {
+      "code": "26-01",
+      "name": "King Crab",
+      "diagram": "https://uspsa.org/resources/classifiers/covers/26-01.png",
+      "pdf": "https://uspsa.org/viewer/26-01.pdf",
+      "rounds": null,
+      "scoring": null,
+      "hhf": {}
+    },
+    {
+      "code": "26-02",
+      "name": "Darwinism",
+      "diagram": "https://uspsa.org/resources/classifiers/covers/26-02.png",
+      "pdf": "https://uspsa.org/viewer/26-02.pdf",
+      "rounds": null,
+      "scoring": null,
+      "hhf": {}
+    },
+    {
+      "code": "26-03",
+      "name": "Mike Who",
+      "diagram": "https://uspsa.org/resources/classifiers/covers/26-03.png",
+      "pdf": "https://uspsa.org/viewer/26-03.pdf",
+      "rounds": null,
+      "scoring": null,
+      "hhf": {}
+    },
+    {
+      "code": "26-04",
+      "name": "Uprange Seriously",
+      "diagram": "https://uspsa.org/resources/classifiers/covers/26-04.png",
+      "pdf": "https://uspsa.org/viewer/26-04.pdf",
+      "rounds": null,
+      "scoring": null,
+      "hhf": {}
+    },
+    {
+      "code": "26-05",
+      "name": "Downrange Obviously",
+      "diagram": "https://uspsa.org/resources/classifiers/covers/26-05.png",
+      "pdf": "https://uspsa.org/viewer/26-05.pdf",
+      "rounds": null,
+      "scoring": null,
+      "hhf": {}
+    },
+    {
+      "code": "99-08",
+      "name": "Melody Line",
+      "diagram": "https://uspsa.org/resources/classifiers/covers/99-08.png",
+      "pdf": "https://uspsa.org/viewer/99-08.pdf",
+      "rounds": null,
+      "scoring": null,
+      "hhf": {}
+    },
+    {
+      "code": "99-10",
+      "name": "Times Two",
+      "diagram": "https://uspsa.org/resources/classifiers/covers/99-10.png",
+      "pdf": "https://uspsa.org/viewer/99-10.pdf",
+      "rounds": null,
+      "scoring": null,
+      "hhf": {}
+    },
+    {
+      "code": "99-11",
+      "name": "El Presidente",
+      "diagram": "https://uspsa.org/resources/classifiers/covers/99-11.png",
+      "pdf": "https://uspsa.org/viewer/99-11.pdf",
+      "rounds": null,
+      "scoring": null,
+      "hhf": {}
+    },
+    {
+      "code": "99-12",
+      "name": "Take Your Choice",
+      "diagram": "https://uspsa.org/resources/classifiers/covers/99-12.png",
+      "pdf": "https://uspsa.org/viewer/99-12.pdf",
+      "rounds": null,
+      "scoring": null,
+      "hhf": {}
+    },
+    {
+      "code": "99-13",
+      "name": "Quicky II",
+      "diagram": "https://uspsa.org/resources/classifiers/covers/99-13.png",
+      "pdf": "https://uspsa.org/viewer/99-13.pdf",
+      "rounds": null,
+      "scoring": null,
+      "hhf": {}
+    },
+    {
+      "code": "99-19",
+      "name": "Paynes Pain",
+      "diagram": "https://uspsa.org/resources/classifiers/covers/99-19.png",
+      "pdf": "https://uspsa.org/viewer/99-19.pdf",
+      "rounds": null,
+      "scoring": null,
+      "hhf": {}
+    },
+    {
+      "code": "99-28",
+      "name": "Hillbillton Drill",
+      "diagram": "https://uspsa.org/resources/classifiers/covers/99-28.png",
+      "pdf": "https://uspsa.org/viewer/99-28.pdf",
+      "rounds": null,
+      "scoring": null,
+      "hhf": {}
+    },
+    {
+      "code": "99-42",
+      "name": "Fast n Furious",
+      "diagram": "https://uspsa.org/resources/classifiers/covers/99-42.png",
+      "pdf": "https://uspsa.org/viewer/99-42.pdf",
+      "rounds": null,
+      "scoring": null,
+      "hhf": {}
+    },
+    {
+      "code": "99-46",
+      "name": "Close Quarter Standards",
+      "diagram": "https://uspsa.org/resources/classifiers/covers/99-46.png",
+      "pdf": "https://uspsa.org/viewer/99-46.pdf",
+      "rounds": null,
+      "scoring": null,
+      "hhf": {}
+    },
+    {
+      "code": "99-53",
+      "name": "Triple Play",
+      "diagram": "https://uspsa.org/resources/classifiers/covers/99-53.png",
+      "pdf": "https://uspsa.org/viewer/99-53.pdf",
+      "rounds": null,
+      "scoring": null,
+      "hhf": {}
+    },
+    {
+      "code": "99-57",
+      "name": "Bookouts Boogie",
+      "diagram": "https://uspsa.org/resources/classifiers/covers/99-57.png",
+      "pdf": "https://uspsa.org/viewer/99-57.pdf",
+      "rounds": null,
+      "scoring": null,
+      "hhf": {}
+    },
+    {
+      "code": "99-62",
+      "name": "Bang and Clang",
+      "diagram": "https://uspsa.org/resources/classifiers/covers/99-62.png",
+      "pdf": "https://uspsa.org/viewer/99-62.pdf",
+      "rounds": null,
+      "scoring": null,
+      "hhf": {}
+    }
+  ]
+}
