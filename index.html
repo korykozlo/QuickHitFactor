@@ -261,8 +261,7 @@ footer a { color: inherit; }
         <div class="hhf-line"><strong>${c.hhf[state.division].toFixed(4)}</strong></div></div>`;
     }
     const saved = state.customHHF[c.code + "/" + state.division] ?? "";
-    const why = div.hhfNote ? div.hhfNote
-      : c.trial ? "This is a trial classifier. USPSA hasn't set high hit factors for it yet."
+    const why = c.trial ? "This is a trial classifier. USPSA hasn't set high hit factors for it yet."
       : "This classifier's high hit factors aren't in USPSA's published HHF tables yet.";
     return `<div><div class="label">High hit factor · ${esc(div.name)}</div>
       <p class="note">${why} Enter one to run the numbers.</p>

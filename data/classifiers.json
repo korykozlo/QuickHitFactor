@@ -16,8 +16,7 @@
       "id": "limited-10",
       "name": "Limited-10",
       "short": "L-10",
-      "major": true,
-      "hhfNote": "USPSA hasn't published Limited-10 high hit factors yet. The division is in a provisional period while USPSA collects scores under the current rules."
+      "major": true
     },
     {
       "id": "limited-optics",
@@ -87,6 +86,7 @@
       "hhf": {
         "open": 9.1147,
         "limited": 7.7467,
+        "limited-10": 7.7467,
         "production": 7.7559,
         "revolver": 6.0017,
         "single-stack": 7.5389,
@@ -108,6 +108,7 @@
       "hhf": {
         "open": 10.5139,
         "limited": 9.2086,
+        "limited-10": 9.2086,
         "production": 9.3031,
         "revolver": 7.3457,
         "single-stack": 9.1892,
@@ -129,6 +130,7 @@
       "hhf": {
         "open": 7.3237,
         "limited": 6.6684,
+        "limited-10": 6.6684,
         "production": 6.5169,
         "revolver": 5.3806,
         "single-stack": 6.5169,
@@ -150,6 +152,7 @@
       "hhf": {
         "open": 10.4963,
         "limited": 9.1769,
+        "limited-10": 9.1769,
         "production": 8.9653,
         "revolver": 7.5661,
         "single-stack": 8.7761,
@@ -171,6 +174,7 @@
       "hhf": {
         "open": 11.7681,
         "limited": 9.8835,
+        "limited-10": 9.8835,
         "production": 9.4383,
         "revolver": 8.4954,
         "single-stack": 9.579,
@@ -192,6 +196,7 @@
       "hhf": {
         "open": 8.6641,
         "limited": 7.2815,
+        "limited-10": 7.2815,
         "production": 6.9113,
         "revolver": 5.8793,
         "single-stack": 7.1757,
@@ -213,6 +218,7 @@
       "hhf": {
         "open": 15.9747,
         "limited": 14.7247,
+        "limited-10": 14.7247,
         "production": 14.6823,
         "revolver": 10.675,
         "single-stack": 14.0966,
@@ -234,6 +240,7 @@
       "hhf": {
         "open": 15.0386,
         "limited": 13.4818,
+        "limited-10": 13.4818,
         "production": 13.2922,
         "revolver": 11.3275,
         "single-stack": 13.0752,
@@ -255,6 +262,7 @@
       "hhf": {
         "open": 13.8309,
         "limited": 11.9768,
+        "limited-10": 11.9768,
         "production": 11.8463,
         "revolver": 9.9516,
         "single-stack": 11.7664,
@@ -276,6 +284,7 @@
       "hhf": {
         "open": 9.9858,
         "limited": 8.2886,
+        "limited-10": 8.2886,
         "production": 8.484,
         "revolver": 8.0047,
         "single-stack": 8.0498,
@@ -297,6 +306,7 @@
       "hhf": {
         "open": 7.778,
         "limited": 6.4844,
+        "limited-10": 6.4844,
         "production": 6.5373,
         "revolver": 5.183,
         "single-stack": 6.6033,
@@ -318,6 +328,7 @@
       "hhf": {
         "open": 11.4774,
         "limited": 10.0709,
+        "limited-10": 10.0709,
         "production": 10.0864,
         "revolver": 8.9229,
         "single-stack": 9.9296,
@@ -339,6 +350,7 @@
       "hhf": {
         "open": 13.2004,
         "limited": 11.6928,
+        "limited-10": 11.6928,
         "production": 11.688,
         "revolver": 7.5746,
         "single-stack": 9.8766,
@@ -360,6 +372,7 @@
       "hhf": {
         "open": 13.7867,
         "limited": 11.2734,
+        "limited-10": 11.2734,
         "production": 11.5497,
         "revolver": 11.0759,
         "single-stack": 11.0609,
@@ -381,6 +394,7 @@
       "hhf": {
         "open": 13.7116,
         "limited": 12.1329,
+        "limited-10": 12.1329,
         "production": 11.7612,
         "revolver": 9.6401,
         "single-stack": 11.8149,
@@ -402,6 +416,7 @@
       "hhf": {
         "open": 11.9573,
         "limited": 10.5496,
+        "limited-10": 10.5496,
         "production": 10.0557,
         "revolver": 7.8119,
         "single-stack": 9.7767,
@@ -423,6 +438,7 @@
       "hhf": {
         "open": 9.7524,
         "limited": 8.6031,
+        "limited-10": 8.6031,
         "production": 8.2698,
         "revolver": 6.5666,
         "single-stack": 8.4155,
@@ -444,6 +460,7 @@
       "hhf": {
         "open": 8.1979,
         "limited": 7.5523,
+        "limited-10": 7.5523,
         "production": 7.2358,
         "revolver": 6.018,
         "single-stack": 7.5886,
@@ -465,6 +482,7 @@
       "hhf": {
         "open": 10.5996,
         "limited": 8.6724,
+        "limited-10": 8.6724,
         "production": 8.6994,
         "revolver": 7.0033,
         "single-stack": 8.7281,
@@ -486,6 +504,7 @@
       "hhf": {
         "open": 9.5927,
         "limited": 8.4875,
+        "limited-10": 8.4875,
         "production": 8.406,
         "revolver": 6.2186,
         "single-stack": 8.1307,
@@ -507,6 +526,7 @@
       "hhf": {
         "open": 6.6239,
         "limited": 5.9765,
+        "limited-10": 5.9765,
         "production": 5.8198,
         "revolver": 5.0887,
         "single-stack": 5.9229,
@@ -528,6 +548,7 @@
       "hhf": {
         "open": 10.8722,
         "limited": 9.9868,
+        "limited-10": 9.9868,
         "production": 9.7043,
         "revolver": 7.9523,
         "single-stack": 9.8039,
@@ -549,6 +570,7 @@
       "hhf": {
         "open": 11.0015,
         "limited": 9.3088,
+        "limited-10": 9.3088,
         "production": 8.7615,
         "revolver": 7.3639,
         "single-stack": 8.8474,
@@ -570,6 +592,7 @@
       "hhf": {
         "open": 10.5263,
         "limited": 9.2994,
+        "limited-10": 9.2994,
         "production": 8.8605,
         "revolver": 6.8682,
         "single-stack": 8.5759,
@@ -591,6 +614,7 @@
       "hhf": {
         "open": 11.2291,
         "limited": 9.7688,
+        "limited-10": 9.7688,
         "production": 9.3669,
         "revolver": 7.4355,
         "single-stack": 9.4492,
@@ -612,6 +636,7 @@
       "hhf": {
         "open": 9.1465,
         "limited": 8.1732,
+        "limited-10": 8.1732,
         "production": 7.9009,
         "revolver": 5.7448,
         "single-stack": 6.9487,
@@ -633,6 +658,7 @@
       "hhf": {
         "open": 12.9051,
         "limited": 11.4445,
+        "limited-10": 11.4445,
         "production": 10.8952,
         "revolver": 8.1171,
         "single-stack": 10.147,
@@ -654,6 +680,7 @@
       "hhf": {
         "open": 11.1878,
         "limited": 9.8941,
+        "limited-10": 9.8941,
         "production": 9.211,
         "revolver": 6.6615,
         "single-stack": 8.2215,
@@ -675,6 +702,7 @@
       "hhf": {
         "open": 17.443,
         "limited": 14.2892,
+        "limited-10": 14.2892,
         "production": 13.2046,
         "revolver": 10.436,
         "single-stack": 13.3487,
@@ -696,6 +724,7 @@
       "hhf": {
         "open": 9.3689,
         "limited": 8.1166,
+        "limited-10": 8.1166,
         "production": 7.8822,
         "revolver": 6.66,
         "single-stack": 8.0243,
@@ -717,6 +746,7 @@
       "hhf": {
         "open": 8.4795,
         "limited": 7.2761,
+        "limited-10": 7.2761,
         "production": 7.2952,
         "revolver": 6.3608,
         "single-stack": 7.7577,
@@ -738,6 +768,7 @@
       "hhf": {
         "open": 12.0442,
         "limited": 10.2002,
+        "limited-10": 10.2002,
         "production": 9.6929,
         "revolver": 8.2006,
         "single-stack": 10.1448,
@@ -759,6 +790,7 @@
       "hhf": {
         "open": 13.4761,
         "limited": 12.2087,
+        "limited-10": 12.2087,
         "production": 11.7798,
         "revolver": 9.8151,
         "single-stack": 11.5577,
@@ -780,6 +812,7 @@
       "hhf": {
         "open": 10.1495,
         "limited": 9.0338,
+        "limited-10": 9.0338,
         "production": 8.539,
         "revolver": 6.9661,
         "single-stack": 7.8134,
@@ -801,6 +834,7 @@
       "hhf": {
         "open": 11.2515,
         "limited": 9.706,
+        "limited-10": 9.706,
         "production": 9.4988,
         "revolver": 7.1461,
         "single-stack": 8.5915,
@@ -822,6 +856,7 @@
       "hhf": {
         "open": 11.6034,
         "limited": 10.3271,
+        "limited-10": 10.3271,
         "production": 10.3769,
         "revolver": 8.6939,
         "single-stack": 10.1621,
@@ -843,6 +878,7 @@
       "hhf": {
         "open": 11.6816,
         "limited": 10.8953,
+        "limited-10": 10.8953,
         "production": 10.631,
         "revolver": 8.2044,
         "single-stack": 9.9424,
@@ -864,6 +900,7 @@
       "hhf": {
         "open": 10.5066,
         "limited": 8.7133,
+        "limited-10": 8.7133,
         "production": 8.3501,
         "revolver": 6.759,
         "single-stack": 7.6699,
@@ -885,6 +922,7 @@
       "hhf": {
         "open": 10.2616,
         "limited": 9.1569,
+        "limited-10": 9.1569,
         "production": 9.5393,
         "revolver": 7.4871,
         "single-stack": 9.173,
@@ -906,6 +944,7 @@
       "hhf": {
         "open": 12.5441,
         "limited": 9.5424,
+        "limited-10": 9.5424,
         "production": 8.5693,
         "revolver": 5.9393,
         "single-stack": 7.5102,
@@ -927,6 +966,7 @@
       "hhf": {
         "open": 13.5619,
         "limited": 9.4982,
+        "limited-10": 9.4982,
         "production": 9.3193,
         "revolver": 6.7558,
         "single-stack": 8.8833,
@@ -948,6 +988,7 @@
       "hhf": {
         "open": 11.4304,
         "limited": 9.9065,
+        "limited-10": 9.9065,
         "production": 9.3329,
         "revolver": 6.8147,
         "single-stack": 9.0835,
@@ -1137,6 +1178,7 @@
       "hhf": {
         "open": 10.248,
         "limited": 8.9179,
+        "limited-10": 8.9179,
         "production": 8.6815,
         "revolver": 6.9174,
         "single-stack": 8.8712,
@@ -1158,6 +1200,7 @@
       "hhf": {
         "open": 10.7383,
         "limited": 9.464,
+        "limited-10": 9.464,
         "production": 9.6784,
         "revolver": 7.2673,
         "single-stack": 8.8809,
@@ -1179,6 +1222,7 @@
       "hhf": {
         "open": 12.1268,
         "limited": 10.5552,
+        "limited-10": 10.5552,
         "production": 10.1008,
         "revolver": 7.7012,
         "single-stack": 9.9873,
@@ -1200,6 +1244,7 @@
       "hhf": {
         "open": 10.327,
         "limited": 8.6208,
+        "limited-10": 8.6208,
         "production": 8.2024,
         "revolver": 6.3698,
         "single-stack": 8.2333,
@@ -1221,6 +1266,7 @@
       "hhf": {
         "open": 9.1619,
         "limited": 8.1491,
+        "limited-10": 8.1491,
         "production": 7.8517,
         "revolver": 7.0364,
         "single-stack": 7.8627,
@@ -1242,6 +1288,7 @@
       "hhf": {
         "open": 6.822,
         "limited": 6.072,
+        "limited-10": 6.072,
         "production": 5.7621,
         "revolver": 4.2812,
         "single-stack": 5.6807,
@@ -1263,6 +1310,7 @@
       "hhf": {
         "open": 11.0113,
         "limited": 9.6007,
+        "limited-10": 9.6007,
         "production": 9.5264,
         "revolver": 7.281,
         "single-stack": 9.2292,
@@ -1284,6 +1332,7 @@
       "hhf": {
         "open": 10.6028,
         "limited": 8.8533,
+        "limited-10": 8.8533,
         "production": 8.7342,
         "revolver": 6.6855,
         "single-stack": 8.5122,
@@ -1305,6 +1354,7 @@
       "hhf": {
         "open": 9.5514,
         "limited": 8.7102,
+        "limited-10": 8.7102,
         "production": 8.344,
         "revolver": 7.094,
         "single-stack": 8.5748,
@@ -1326,6 +1376,7 @@
       "hhf": {
         "open": 7.8809,
         "limited": 6.5956,
+        "limited-10": 6.5956,
         "production": 6.6737,
         "revolver": 4.4796,
         "single-stack": 6.6368,
@@ -1347,6 +1398,7 @@
       "hhf": {
         "open": 8.2959,
         "limited": 6.5598,
+        "limited-10": 6.5598,
         "production": 6.5202,
         "revolver": 5.1125,
         "single-stack": 6.1842,
@@ -1368,6 +1420,7 @@
       "hhf": {
         "open": 12.6035,
         "limited": 11.0471,
+        "limited-10": 11.0471,
         "production": 10.9717,
         "revolver": 9.7967,
         "single-stack": 10.8877,
