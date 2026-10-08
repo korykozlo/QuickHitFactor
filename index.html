@@ -162,7 +162,7 @@ footer a { color: inherit; }
     $("#footer").innerHTML =
       `Stage sheets and diagrams © USPSA, from <a href="${esc(data.source)}" target="_blank" rel="noopener">uspsa.org/classifiers</a>. ` +
       `High hit factors from USPSA's <a href="${esc(data.hhfSource)}" target="_blank" rel="noopener">2025 High Hit Factor tables</a>, ` +
-      `and from <a href="https://www.hitfactor.info" target="_blank" rel="noopener">hitfactor.info</a> for the 25- and 26-series and Limited-10. ` +
+      `and from <a href="https://www.hitfactor.info" target="_blank" rel="noopener">hitfactor.info</a> for the 25-series and Limited-10. 26-series HHFs are worked out from their published class minimums. ` +
       `Retrieved ${esc(data.retrieved)}. Always confirm against USPSA before relying on a number.`;
   }).catch(() => {
     $("#main").innerHTML = `<p class="empty">Couldn't load the classifier data. Reload the page to try again.</p>`;
@@ -187,7 +187,7 @@ footer a { color: inherit; }
     $("#list").innerHTML = items.length ? items.map((c) => `
       <li><button type="button" data-code="${c.code}" aria-current="${c.code === state.code}">
         <span class="code">${c.code}</span><span>${esc(c.name)}</span>
-        <span class="tag">${c.trial ? (c.hhfEstimate ? "trial · est. HHF" : "trial") : !Object.keys(c.hhf).length ? "no HHF" : ""}</span>
+        <span class="tag">${c.hhfEstimate ? "est. HHF" : !Object.keys(c.hhf).length ? "no HHF" : ""}</span>
       </button></li>`).join("") : `<li class="empty">No classifier matches “${esc(q)}”.</li>`;
     $("#list").querySelectorAll("button").forEach((b) => b.addEventListener("click", () => {
       state.code = b.dataset.code;
@@ -214,7 +214,6 @@ footer a { color: inherit; }
             <li>${c.scoring === "Virginia" ? "Virginia Count" : "Comstock"}</li>
             <li>${c.rounds} scoring hits · ${c.points} points</li>
             ${c.steel ? `<li class="steel">${c.steel} steel · ${paper} paper hits</li>` : ""}
-            ${c.trial ? `<li>Trial classifier</li>` : ""}
           </ul>
         </div>
         <a href="${esc(c.pdf)}" target="_blank" rel="noopener">Full stage sheet (PDF)</a>
@@ -260,13 +259,13 @@ footer a { color: inherit; }
     if (c.hhf[state.division] != null) {
       return `<div><div class="label">High hit factor · ${esc(div.name)}</div>
         <div class="hhf-line"><strong>${c.hhf[state.division].toFixed(4)}</strong></div>
-        ${c.hhfEstimate ? `<p class="note">This is a trial classifier with no official HHF yet, so this is the recommended HHF that <a href="${esc(c.hhfSource)}" target="_blank" rel="noopener">hitfactor.info</a> estimates from scores so far. Treat it as a guide.</p>`
+        ${c.hhfFromClassMins ? `<p class="note">Worked out from the published minimum hit factor for each class (GM is 95% of the HHF).</p>`
+          : c.hhfEstimate ? `<p class="note">This classifier has no official HHF yet, so this is the recommended HHF that <a href="${esc(c.hhfSource)}" target="_blank" rel="noopener">hitfactor.info</a> estimates from scores so far. Treat it as a guide.</p>`
           : state.division === "limited-10" && !c.hhfSource ? `<p class="note">USPSA's HHF tables have no Limited-10 column, so this is the current HHF from <a href="https://www.hitfactor.info/classifiers/l10/${c.code}" target="_blank" rel="noopener">hitfactor.info</a>.</p>`
           : c.hhfSource ? `<p class="note">USPSA's HHF tables don't cover this classifier yet, so this is the current HHF from <a href="${esc(c.hhfSource)}" target="_blank" rel="noopener">hitfactor.info</a>.</p>` : ""}</div>`;
     }
     const saved = state.customHHF[c.code + "/" + state.division] ?? "";
-    const why = c.trial ? "This is a trial classifier. USPSA hasn't set high hit factors for it yet."
-      : "This classifier's high hit factors aren't in USPSA's published HHF tables yet.";
+    const why = "This classifier's high hit factors aren't in USPSA's published HHF tables yet.";
     return `<div><div class="label">High hit factor · ${esc(div.name)}</div>
       <p class="note">${why} Enter one to run the numbers.</p>
       <div class="hhf-line"><input id="hhf-input" type="number" step="0.0001" min="0" inputmode="decimal" placeholder="e.g. 9.5000" value="${saved}" aria-label="High hit factor"></div></div>`;

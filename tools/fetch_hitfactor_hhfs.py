@@ -2,10 +2,13 @@
 
 Usage: python3 tools/fetch_hitfactor_hhfs.py
 
-Run after tools/build_data.py. For every 25- and 26-series classifier it takes the
+Run after tools/build_data.py. For every 25-series classifier it takes the
 "Cur. HHF" that hitfactor.info shows on /classifiers/<division>/<code>. Classifiers
-with no current HHF there (the 26-series trials) get its "Rec. HHF" instead, an
-estimate hitfactor.info computes from the scores so far, flagged as hhfEstimate.
+with no current HHF there get its "Rec. HHF" instead, an estimate hitfactor.info
+computes from the scores so far, flagged as hhfEstimate.
+
+The 26-series HHFs are not fetched: they were worked out from the published class
+minimum hit factors (HHF = GM min / 0.95) and are kept as entered in classifiers.json.
 
 Limited-10 comes from hitfactor.info for every classifier, replacing the Limited
 copy that build_data.py writes, since USPSA's HHF report has no L10 tables.
@@ -17,7 +20,7 @@ import urllib.request
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DATA = os.path.join(ROOT, "data", "classifiers.json")
 SITE = "https://www.hitfactor.info"
-SERIES = ("25-", "26-")
+SERIES = ("25-",)
 # hitfactor.info division ids.
 DIVISIONS = {
     "open": "opn", "limited": "ltd", "limited-10": "l10", "limited-optics": "lo",
@@ -43,6 +46,8 @@ def main():
     data = json.load(open(DATA))
     found = {ours: site_hhfs(theirs) for ours, theirs in DIVISIONS.items()}
     for c in data["classifiers"]:
+        if c.get("hhfFromClassMins"):
+            continue
         if not c["code"].startswith(SERIES):
             if c["code"] in found["limited-10"]:
                 c["hhf"]["limited-10"] = round(found["limited-10"][c["code"]][0], 4)

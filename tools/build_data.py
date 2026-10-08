@@ -87,7 +87,6 @@ def main(pdf_dir, report):
         # Placeholder: tools/fetch_hitfactor_hhfs.py replaces it with hitfactor.info's L10 HHF.
         if "limited" in c["hhf"]:
             c["hhf"]["limited-10"] = c["hhf"]["limited"]
-        c["trial"] = code.startswith("26-")
         c["pdf"] = f"https://uspsa.org/resources/classifiers/{code}.pdf"
         c["diagram"] = f"diagrams/{code}.webp"
         render_diagram(os.path.join(pdf_dir, f"{code}.pdf"), os.path.join(DIAGRAMS, f"{code}.webp"))

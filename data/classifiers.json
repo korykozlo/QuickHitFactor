@@ -95,8 +95,7 @@
         "limited-optics": 8.3794
       },
       "points": 55,
-      "steel": 3,
-      "trial": false
+      "steel": 3
     },
     {
       "code": "03-05",
@@ -117,8 +116,7 @@
         "limited-optics": 9.6841
       },
       "points": 50,
-      "steel": 6,
-      "trial": false
+      "steel": 6
     },
     {
       "code": "03-07",
@@ -139,8 +137,7 @@
         "limited-optics": 6.6295
       },
       "points": 100,
-      "steel": 0,
-      "trial": false
+      "steel": 0
     },
     {
       "code": "03-08",
@@ -161,8 +158,7 @@
         "limited-optics": 9.5797
       },
       "points": 70,
-      "steel": 0,
-      "trial": false
+      "steel": 0
     },
     {
       "code": "03-09",
@@ -183,8 +179,7 @@
         "limited-optics": 10.6062
       },
       "points": 80,
-      "steel": 0,
-      "trial": false
+      "steel": 0
     },
     {
       "code": "03-18",
@@ -205,8 +200,7 @@
         "limited-optics": 7.591
       },
       "points": 120,
-      "steel": 0,
-      "trial": false
+      "steel": 0
     },
     {
       "code": "06-03",
@@ -227,8 +221,7 @@
         "limited-optics": 15.1357
       },
       "points": 100,
-      "steel": 0,
-      "trial": false
+      "steel": 0
     },
     {
       "code": "06-04",
@@ -249,8 +242,7 @@
         "limited-optics": 14.2579
       },
       "points": 40,
-      "steel": 2,
-      "trial": false
+      "steel": 2
     },
     {
       "code": "06-05",
@@ -271,8 +263,7 @@
         "limited-optics": 12.511
       },
       "points": 40,
-      "steel": 2,
-      "trial": false
+      "steel": 2
     },
     {
       "code": "06-10",
@@ -293,8 +284,7 @@
         "limited-optics": 9.8694
       },
       "points": 30,
-      "steel": 6,
-      "trial": false
+      "steel": 6
     },
     {
       "code": "08-02",
@@ -315,8 +305,7 @@
         "limited-optics": 6.4628
       },
       "points": 100,
-      "steel": 0,
-      "trial": false
+      "steel": 0
     },
     {
       "code": "08-03",
@@ -337,8 +326,7 @@
         "limited-optics": 10.7857
       },
       "points": 30,
-      "steel": 2,
-      "trial": false
+      "steel": 2
     },
     {
       "code": "09-10",
@@ -359,8 +347,7 @@
         "limited-optics": 11.8718
       },
       "points": 60,
-      "steel": 0,
-      "trial": false
+      "steel": 0
     },
     {
       "code": "13-02",
@@ -381,8 +368,7 @@
         "limited-optics": 13.1483
       },
       "points": 40,
-      "steel": 0,
-      "trial": false
+      "steel": 0
     },
     {
       "code": "13-04",
@@ -403,8 +389,7 @@
         "limited-optics": 12.1661
       },
       "points": 90,
-      "steel": 0,
-      "trial": false
+      "steel": 0
     },
     {
       "code": "13-05",
@@ -425,8 +410,7 @@
         "limited-optics": 11.0382
       },
       "points": 80,
-      "steel": 0,
-      "trial": false
+      "steel": 0
     },
     {
       "code": "13-06",
@@ -447,8 +431,7 @@
         "limited-optics": 8.7345
       },
       "points": 50,
-      "steel": 0,
-      "trial": false
+      "steel": 0
     },
     {
       "code": "18-03",
@@ -469,8 +452,7 @@
         "limited-optics": 7.1931
       },
       "points": 120,
-      "steel": 0,
-      "trial": false
+      "steel": 0
     },
     {
       "code": "18-05",
@@ -491,8 +473,7 @@
         "limited-optics": 9.3661
       },
       "points": 80,
-      "steel": 4,
-      "trial": false
+      "steel": 4
     },
     {
       "code": "18-07",
@@ -513,8 +494,7 @@
         "limited-optics": 8.6889
       },
       "points": 40,
-      "steel": 2,
-      "trial": false
+      "steel": 2
     },
     {
       "code": "18-08",
@@ -535,8 +515,7 @@
         "limited-optics": 6.1239
       },
       "points": 80,
-      "steel": 0,
-      "trial": false
+      "steel": 0
     },
     {
       "code": "18-09",
@@ -557,8 +536,7 @@
         "limited-optics": 9.8631
       },
       "points": 120,
-      "steel": 0,
-      "trial": false
+      "steel": 0
     },
     {
       "code": "19-01",
@@ -579,8 +557,7 @@
         "limited-optics": 9.8182
       },
       "points": 60,
-      "steel": 0,
-      "trial": false
+      "steel": 0
     },
     {
       "code": "19-02",
@@ -601,8 +578,7 @@
         "limited-optics": 9.7586
       },
       "points": 60,
-      "steel": 4,
-      "trial": false
+      "steel": 4
     },
     {
       "code": "19-04",
@@ -623,8 +599,7 @@
         "limited-optics": 9.9605
       },
       "points": 70,
-      "steel": 0,
-      "trial": false
+      "steel": 0
     },
     {
       "code": "20-01",
@@ -645,8 +620,7 @@
         "limited-optics": 8.3384
       },
       "points": 60,
-      "steel": 2,
-      "trial": false
+      "steel": 2
     },
     {
       "code": "20-02",
@@ -667,8 +641,7 @@
         "limited-optics": 11.7386
       },
       "points": 60,
-      "steel": 0,
-      "trial": false
+      "steel": 0
     },
     {
       "code": "20-03",
@@ -689,8 +662,7 @@
         "limited-optics": 10.2338
       },
       "points": 60,
-      "steel": 4,
-      "trial": false
+      "steel": 4
     },
     {
       "code": "21-01",
@@ -711,8 +683,7 @@
         "limited-optics": 14.9063
       },
       "points": 120,
-      "steel": 0,
-      "trial": false
+      "steel": 0
     },
     {
       "code": "22-01",
@@ -733,8 +704,7 @@
         "limited-optics": 8.5411
       },
       "points": 90,
-      "steel": 0,
-      "trial": false
+      "steel": 0
     },
     {
       "code": "22-02",
@@ -755,8 +725,7 @@
         "limited-optics": 7.6366
       },
       "points": 90,
-      "steel": 0,
-      "trial": false
+      "steel": 0
     },
     {
       "code": "22-04",
@@ -777,8 +746,7 @@
         "limited-optics": 10.8522
       },
       "points": 80,
-      "steel": 0,
-      "trial": false
+      "steel": 0
     },
     {
       "code": "22-06",
@@ -799,8 +767,7 @@
         "limited-optics": 12.3901
       },
       "points": 35,
-      "steel": 1,
-      "trial": false
+      "steel": 1
     },
     {
       "code": "22-07",
@@ -821,8 +788,7 @@
         "limited-optics": 9.1462
       },
       "points": 70,
-      "steel": 0,
-      "trial": false
+      "steel": 0
     },
     {
       "code": "23-01",
@@ -843,8 +809,7 @@
         "limited-optics": 10.487
       },
       "points": 60,
-      "steel": 0,
-      "trial": false
+      "steel": 0
     },
     {
       "code": "23-02",
@@ -865,8 +830,7 @@
         "limited-optics": 10.747
       },
       "points": 60,
-      "steel": 0,
-      "trial": false
+      "steel": 0
     },
     {
       "code": "24-01",
@@ -887,8 +851,7 @@
         "limited-optics": 10.8972
       },
       "points": 120,
-      "steel": 0,
-      "trial": false
+      "steel": 0
     },
     {
       "code": "24-02",
@@ -909,8 +872,7 @@
         "limited-optics": 9.6515
       },
       "points": 90,
-      "steel": 0,
-      "trial": false
+      "steel": 0
     },
     {
       "code": "24-04",
@@ -931,8 +893,7 @@
         "limited-optics": 9.4176
       },
       "points": 90,
-      "steel": 0,
-      "trial": false
+      "steel": 0
     },
     {
       "code": "24-06",
@@ -953,8 +914,7 @@
         "limited-optics": 11.0953
       },
       "points": 90,
-      "steel": 0,
-      "trial": false
+      "steel": 0
     },
     {
       "code": "24-08",
@@ -975,8 +935,7 @@
         "limited-optics": 10.6907
       },
       "points": 120,
-      "steel": 0,
-      "trial": false
+      "steel": 0
     },
     {
       "code": "24-09",
@@ -997,8 +956,7 @@
         "limited-optics": 10.4636
       },
       "points": 90,
-      "steel": 0,
-      "trial": false
+      "steel": 0
     },
     {
       "code": "25-01",
@@ -1020,7 +978,6 @@
       },
       "points": 95,
       "steel": 1,
-      "trial": false,
       "hhfSource": "https://www.hitfactor.info/classifiers/co/25-01"
     },
     {
@@ -1043,7 +1000,6 @@
       },
       "points": 50,
       "steel": 0,
-      "trial": false,
       "hhfSource": "https://www.hitfactor.info/classifiers/co/25-02"
     },
     {
@@ -1066,7 +1022,6 @@
       },
       "points": 50,
       "steel": 0,
-      "trial": false,
       "hhfSource": "https://www.hitfactor.info/classifiers/co/25-03"
     },
     {
@@ -1089,7 +1044,6 @@
       },
       "points": 50,
       "steel": 0,
-      "trial": false,
       "hhfSource": "https://www.hitfactor.info/classifiers/co/25-04"
     },
     {
@@ -1112,7 +1066,6 @@
       },
       "points": 80,
       "steel": 4,
-      "trial": false,
       "hhfSource": "https://www.hitfactor.info/classifiers/co/25-05"
     },
     {
@@ -1135,7 +1088,6 @@
       },
       "points": 70,
       "steel": 0,
-      "trial": false,
       "hhfSource": "https://www.hitfactor.info/classifiers/co/25-06"
     },
     {
@@ -1158,7 +1110,6 @@
       },
       "points": 70,
       "steel": 0,
-      "trial": false,
       "hhfSource": "https://www.hitfactor.info/classifiers/co/25-07"
     },
     {
@@ -1181,7 +1132,6 @@
       },
       "points": 50,
       "steel": 0,
-      "trial": false,
       "hhfSource": "https://www.hitfactor.info/classifiers/co/25-08"
     },
     {
@@ -1204,7 +1154,6 @@
       },
       "points": 60,
       "steel": 0,
-      "trial": false,
       "hhfSource": "https://www.hitfactor.info/classifiers/co/25-09"
     },
     {
@@ -1215,21 +1164,19 @@
       "rounds": 14,
       "scoring": "Comstock",
       "hhf": {
-        "open": 10.1153,
-        "limited": 8.1719,
-        "limited-10": 9.6358,
-        "limited-optics": 9.3064,
-        "carry-optics": 9.2665,
-        "production": 7.8307,
-        "single-stack": 8.0354,
-        "revolver": 5.9399,
-        "pcc": 10.5117
+        "open": 10.1176,
+        "limited": 8.184,
+        "limited-10": 9.6837,
+        "limited-optics": 9.3361,
+        "carry-optics": 9.3041,
+        "production": 7.8402,
+        "single-stack": 8.0465,
+        "revolver": 5.9484,
+        "pcc": 10.5925
       },
       "points": 70,
       "steel": 2,
-      "trial": true,
-      "hhfSource": "https://www.hitfactor.info/classifiers/co/26-01",
-      "hhfEstimate": true
+      "hhfFromClassMins": true
     },
     {
       "code": "26-02",
@@ -1239,21 +1186,19 @@
       "rounds": 14,
       "scoring": "Comstock",
       "hhf": {
-        "open": 8.542,
-        "limited": 7.0428,
-        "limited-10": 8.0585,
-        "limited-optics": 7.825,
-        "carry-optics": 7.7972,
-        "production": 6.7538,
-        "single-stack": 6.9272,
-        "revolver": 6.1813,
-        "pcc": 7.9793
+        "open": 8.5778,
+        "limited": 7.0572,
+        "limited-10": 8.098,
+        "limited-optics": 7.85,
+        "carry-optics": 7.8133,
+        "production": 6.7659,
+        "single-stack": 6.9407,
+        "revolver": 6.1907,
+        "pcc": 7.9993
       },
       "points": 70,
       "steel": 2,
-      "trial": true,
-      "hhfSource": "https://www.hitfactor.info/classifiers/co/26-02",
-      "hhfEstimate": true
+      "hhfFromClassMins": true
     },
     {
       "code": "26-03",
@@ -1263,21 +1208,19 @@
       "rounds": 10,
       "scoring": "Comstock",
       "hhf": {
-        "open": 9.4201,
-        "limited": 8.6114,
-        "limited-10": 9.2378,
-        "limited-optics": 8.9827,
-        "carry-optics": 8.9799,
-        "production": 8.1893,
-        "single-stack": 8.4426,
-        "revolver": 6.8155,
-        "pcc": 9.6917
+        "open": 9.432,
+        "limited": 8.6549,
+        "limited-10": 9.2201,
+        "limited-optics": 8.9778,
+        "carry-optics": 8.9637,
+        "production": 8.2375,
+        "single-stack": 8.4879,
+        "revolver": 6.8502,
+        "pcc": 9.7258
       },
       "points": 50,
       "steel": 0,
-      "trial": true,
-      "hhfSource": "https://www.hitfactor.info/classifiers/co/26-03",
-      "hhfEstimate": true
+      "hhfFromClassMins": true
     },
     {
       "code": "26-04",
@@ -1287,21 +1230,19 @@
       "rounds": 12,
       "scoring": "Comstock",
       "hhf": {
-        "open": 8.8007,
-        "limited": 7.2777,
-        "limited-10": 8.4152,
-        "limited-optics": 8.1078,
-        "carry-optics": 8.1027,
-        "production": 6.9214,
-        "single-stack": 7.1352,
-        "revolver": 6.6644,
-        "pcc": 8.3493
+        "open": 8.8159,
+        "limited": 7.1648,
+        "limited-10": 8.413,
+        "limited-optics": 8.1226,
+        "carry-optics": 8.0958,
+        "production": 6.8009,
+        "single-stack": 7.0193,
+        "revolver": 6.5441,
+        "pcc": 8.3038
       },
       "points": 60,
       "steel": 0,
-      "trial": true,
-      "hhfSource": "https://www.hitfactor.info/classifiers/co/26-04",
-      "hhfEstimate": true
+      "hhfFromClassMins": true
     },
     {
       "code": "26-05",
@@ -1311,21 +1252,19 @@
       "rounds": 12,
       "scoring": "Comstock",
       "hhf": {
-        "open": 9.7102,
-        "limited": 7.6411,
-        "limited-10": 9.0428,
-        "limited-optics": 8.6477,
-        "carry-optics": 8.6267,
-        "production": 7.2379,
-        "single-stack": 7.4798,
-        "revolver": 6.9787,
-        "pcc": 9.6442
+        "open": 9.762,
+        "limited": 7.6909,
+        "limited-10": 9.0512,
+        "limited-optics": 8.6415,
+        "carry-optics": 8.6347,
+        "production": 7.2909,
+        "single-stack": 7.5309,
+        "revolver": 7.0287,
+        "pcc": 9.689
       },
       "points": 60,
       "steel": 0,
-      "trial": true,
-      "hhfSource": "https://www.hitfactor.info/classifiers/co/26-05",
-      "hhfEstimate": true
+      "hhfFromClassMins": true
     },
     {
       "code": "99-08",
@@ -1346,8 +1285,7 @@
         "limited-optics": 9.199
       },
       "points": 60,
-      "steel": 0,
-      "trial": false
+      "steel": 0
     },
     {
       "code": "99-10",
@@ -1368,8 +1306,7 @@
         "limited-optics": 9.6792
       },
       "points": 60,
-      "steel": 0,
-      "trial": false
+      "steel": 0
     },
     {
       "code": "99-11",
@@ -1390,8 +1327,7 @@
         "limited-optics": 10.5956
       },
       "points": 60,
-      "steel": 0,
-      "trial": false
+      "steel": 0
     },
     {
       "code": "99-12",
@@ -1412,8 +1348,7 @@
         "limited-optics": 8.9675
       },
       "points": 60,
-      "steel": 0,
-      "trial": false
+      "steel": 0
     },
     {
       "code": "99-13",
@@ -1434,8 +1369,7 @@
         "limited-optics": 7.9572
       },
       "points": 120,
-      "steel": 0,
-      "trial": false
+      "steel": 0
     },
     {
       "code": "99-19",
@@ -1456,8 +1390,7 @@
         "limited-optics": 6.4275
       },
       "points": 60,
-      "steel": 0,
-      "trial": false
+      "steel": 0
     },
     {
       "code": "99-28",
@@ -1478,8 +1411,7 @@
         "limited-optics": 9.8941
       },
       "points": 60,
-      "steel": 6,
-      "trial": false
+      "steel": 6
     },
     {
       "code": "99-42",
@@ -1500,8 +1432,7 @@
         "limited-optics": 9.6434
       },
       "points": 60,
-      "steel": 4,
-      "trial": false
+      "steel": 4
     },
     {
       "code": "99-46",
@@ -1522,8 +1453,7 @@
         "limited-optics": 8.5262
       },
       "points": 120,
-      "steel": 0,
-      "trial": false
+      "steel": 0
     },
     {
       "code": "99-53",
@@ -1544,8 +1474,7 @@
         "limited-optics": 7.3626
       },
       "points": 60,
-      "steel": 6,
-      "trial": false
+      "steel": 6
     },
     {
       "code": "99-57",
@@ -1566,8 +1495,7 @@
         "limited-optics": 8.0864
       },
       "points": 60,
-      "steel": 4,
-      "trial": false
+      "steel": 4
     },
     {
       "code": "99-62",
@@ -1588,8 +1516,7 @@
         "limited-optics": 12.1807
       },
       "points": 30,
-      "steel": 4,
-      "trial": false
+      "steel": 4
     }
   ],
   "hhfSource": "https://s3.uspsa.io/classification/Classifier%20Committee%20-%202025_Recommended_High_Hit_Factors_and_System_Updates.pdf"
