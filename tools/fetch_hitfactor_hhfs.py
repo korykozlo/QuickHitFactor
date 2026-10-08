@@ -6,6 +6,9 @@ Run after tools/build_data.py. For every 25- and 26-series classifier it takes t
 "Cur. HHF" that hitfactor.info shows on /classifiers/<division>/<code>. Classifiers
 with no current HHF there (the 26-series trials) get its "Rec. HHF" instead, an
 estimate hitfactor.info computes from the scores so far, flagged as hhfEstimate.
+
+Limited-10 comes from hitfactor.info for every classifier, replacing the Limited
+copy that build_data.py writes, since USPSA's HHF report has no L10 tables.
 """
 import json
 import os
@@ -15,11 +18,11 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DATA = os.path.join(ROOT, "data", "classifiers.json")
 SITE = "https://www.hitfactor.info"
 SERIES = ("25-", "26-")
-# hitfactor.info division ids. Limited-10 is left out on purpose: USPSA scores it
-# against the Limited HHFs, so it copies Limited below.
+# hitfactor.info division ids.
 DIVISIONS = {
-    "open": "opn", "limited": "ltd", "limited-optics": "lo", "carry-optics": "co",
-    "production": "prod", "single-stack": "ss", "revolver": "rev", "pcc": "pcc",
+    "open": "opn", "limited": "ltd", "limited-10": "l10", "limited-optics": "lo",
+    "carry-optics": "co", "production": "prod", "single-stack": "ss", "revolver": "rev",
+    "pcc": "pcc",
 }
 
 
@@ -41,11 +44,11 @@ def main():
     found = {ours: site_hhfs(theirs) for ours, theirs in DIVISIONS.items()}
     for c in data["classifiers"]:
         if not c["code"].startswith(SERIES):
+            if c["code"] in found["limited-10"]:
+                c["hhf"]["limited-10"] = round(found["limited-10"][c["code"]][0], 4)
             continue
         hits = {d: found[d][c["code"]] for d in DIVISIONS if c["code"] in found[d]}
         hhf = {d: round(v, 4) for d, (v, _) in hits.items()}
-        if "limited" in hhf:
-            hhf["limited-10"] = hhf["limited"]
         c["hhf"] = hhf
         if hhf:
             c["hhfSource"] = f"{SITE}/classifiers/{DIVISIONS['carry-optics']}/{c['code']}"
