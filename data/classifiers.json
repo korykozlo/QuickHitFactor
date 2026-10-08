@@ -1007,10 +1007,21 @@
       "pdf": "https://uspsa.org/resources/classifiers/25-01.pdf",
       "rounds": 19,
       "scoring": "Comstock",
-      "hhf": {},
+      "hhf": {
+        "open": 9.2812,
+        "limited": 7.6527,
+        "limited-optics": 8.5538,
+        "carry-optics": 8.5128,
+        "production": 7.3759,
+        "single-stack": 7.5419,
+        "revolver": 6.985,
+        "pcc": 8.9521,
+        "limited-10": 7.6527
+      },
       "points": 95,
       "steel": 1,
-      "trial": false
+      "trial": false,
+      "hhfSource": "https://www.hitfactor.info/classifiers/co/25-01"
     },
     {
       "code": "25-02",
@@ -1019,10 +1030,21 @@
       "pdf": "https://uspsa.org/resources/classifiers/25-02.pdf",
       "rounds": 10,
       "scoring": "Comstock",
-      "hhf": {},
+      "hhf": {
+        "open": 12.4125,
+        "limited": 10.2152,
+        "limited-optics": 11.1723,
+        "carry-optics": 11.0651,
+        "production": 9.6781,
+        "single-stack": 10.0004,
+        "revolver": 7.7845,
+        "pcc": 12.5472,
+        "limited-10": 10.2152
+      },
       "points": 50,
       "steel": 0,
-      "trial": false
+      "trial": false,
+      "hhfSource": "https://www.hitfactor.info/classifiers/co/25-02"
     },
     {
       "code": "25-03",
@@ -1031,10 +1053,21 @@
       "pdf": "https://uspsa.org/resources/classifiers/25-03.pdf",
       "rounds": 10,
       "scoring": "Comstock",
-      "hhf": {},
+      "hhf": {
+        "open": 9.8129,
+        "limited": 8.7256,
+        "limited-optics": 8.9444,
+        "carry-optics": 8.9237,
+        "production": 8.2964,
+        "single-stack": 8.5539,
+        "revolver": 7.6029,
+        "pcc": 9.6401,
+        "limited-10": 8.7256
+      },
       "points": 50,
       "steel": 0,
-      "trial": false
+      "trial": false,
+      "hhfSource": "https://www.hitfactor.info/classifiers/co/25-03"
     },
     {
       "code": "25-04",
@@ -1043,10 +1076,21 @@
       "pdf": "https://uspsa.org/resources/classifiers/25-04.pdf",
       "rounds": 10,
       "scoring": "Comstock",
-      "hhf": {},
+      "hhf": {
+        "open": 11.9649,
+        "limited": 10.3056,
+        "limited-optics": 11.0666,
+        "carry-optics": 11.0002,
+        "production": 9.8695,
+        "single-stack": 10.1311,
+        "revolver": 7.8174,
+        "pcc": 12.0474,
+        "limited-10": 10.3056
+      },
       "points": 50,
       "steel": 0,
-      "trial": false
+      "trial": false,
+      "hhfSource": "https://www.hitfactor.info/classifiers/co/25-04"
     },
     {
       "code": "25-05",
@@ -1055,10 +1099,21 @@
       "pdf": "https://uspsa.org/resources/classifiers/25-05.pdf",
       "rounds": 16,
       "scoring": "Comstock",
-      "hhf": {},
+      "hhf": {
+        "open": 11.1036,
+        "limited": 9.0106,
+        "limited-optics": 10.2836,
+        "carry-optics": 10.2233,
+        "production": 8.6692,
+        "single-stack": 8.8741,
+        "revolver": 8.4736,
+        "pcc": 11.3185,
+        "limited-10": 9.0106
+      },
       "points": 80,
       "steel": 4,
-      "trial": false
+      "trial": false,
+      "hhfSource": "https://www.hitfactor.info/classifiers/co/25-05"
     },
     {
       "code": "25-06",
@@ -1067,10 +1122,21 @@
       "pdf": "https://uspsa.org/resources/classifiers/25-06.pdf",
       "rounds": 14,
       "scoring": "Comstock",
-      "hhf": {},
+      "hhf": {
+        "open": 11.478,
+        "limited": 10.2289,
+        "limited-optics": 10.4876,
+        "carry-optics": 10.4033,
+        "production": 9.7193,
+        "single-stack": 10.025,
+        "revolver": 8.5997,
+        "pcc": 11.3411,
+        "limited-10": 10.2289
+      },
       "points": 70,
       "steel": 0,
-      "trial": false
+      "trial": false,
+      "hhfSource": "https://www.hitfactor.info/classifiers/co/25-06"
     },
     {
       "code": "25-07",
@@ -1079,10 +1145,21 @@
       "pdf": "https://uspsa.org/resources/classifiers/25-07.pdf",
       "rounds": 14,
       "scoring": "Comstock",
-      "hhf": {},
+      "hhf": {
+        "open": 11.6012,
+        "limited": 10.1338,
+        "limited-optics": 11.1059,
+        "carry-optics": 11.0451,
+        "production": 9.7699,
+        "single-stack": 9.9882,
+        "revolver": 7.6885,
+        "pcc": 12.1574,
+        "limited-10": 10.1338
+      },
       "points": 70,
       "steel": 0,
-      "trial": false
+      "trial": false,
+      "hhfSource": "https://www.hitfactor.info/classifiers/co/25-07"
     },
     {
       "code": "25-08",
@@ -1091,10 +1168,21 @@
       "pdf": "https://uspsa.org/resources/classifiers/25-08.pdf",
       "rounds": 10,
       "scoring": "Comstock",
-      "hhf": {},
+      "hhf": {
+        "open": 11.2412,
+        "limited": 9.8933,
+        "limited-optics": 10.3451,
+        "carry-optics": 10.2897,
+        "production": 9.3338,
+        "single-stack": 9.6695,
+        "revolver": 8.5292,
+        "pcc": 11.9314,
+        "limited-10": 9.8933
+      },
       "points": 50,
       "steel": 0,
-      "trial": false
+      "trial": false,
+      "hhfSource": "https://www.hitfactor.info/classifiers/co/25-08"
     },
     {
       "code": "25-09",
@@ -1103,10 +1191,21 @@
       "pdf": "https://uspsa.org/resources/classifiers/25-09.pdf",
       "rounds": 12,
       "scoring": "Virginia",
-      "hhf": {},
+      "hhf": {
+        "open": 9.0938,
+        "limited": 7.4733,
+        "limited-optics": 8.0341,
+        "carry-optics": 7.8967,
+        "production": 7.1025,
+        "single-stack": 7.325,
+        "revolver": 6.544,
+        "pcc": 10.0262,
+        "limited-10": 7.4733
+      },
       "points": 60,
       "steel": 0,
-      "trial": false
+      "trial": false,
+      "hhfSource": "https://www.hitfactor.info/classifiers/co/25-09"
     },
     {
       "code": "26-01",
