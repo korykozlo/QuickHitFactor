@@ -162,7 +162,7 @@ footer a { color: inherit; }
     $("#footer").innerHTML =
       `Stage sheets and diagrams © USPSA, from <a href="${esc(data.source)}" target="_blank" rel="noopener">uspsa.org/classifiers</a>. ` +
       `High hit factors from USPSA's <a href="${esc(data.hhfSource)}" target="_blank" rel="noopener">2025 High Hit Factor tables</a>, ` +
-      `and from <a href="https://www.hitfactor.info" target="_blank" rel="noopener">hitfactor.info</a> for the 25-series. ` +
+      `and from <a href="https://www.hitfactor.info" target="_blank" rel="noopener">hitfactor.info</a> for the 25- and 26-series. ` +
       `Retrieved ${esc(data.retrieved)}. Always confirm against USPSA before relying on a number.`;
   }).catch(() => {
     $("#main").innerHTML = `<p class="empty">Couldn't load the classifier data. Reload the page to try again.</p>`;
@@ -187,7 +187,7 @@ footer a { color: inherit; }
     $("#list").innerHTML = items.length ? items.map((c) => `
       <li><button type="button" data-code="${c.code}" aria-current="${c.code === state.code}">
         <span class="code">${c.code}</span><span>${esc(c.name)}</span>
-        <span class="tag">${c.trial ? "trial" : !Object.keys(c.hhf).length ? "no HHF" : ""}</span>
+        <span class="tag">${c.trial ? (c.hhfEstimate ? "trial · est. HHF" : "trial") : !Object.keys(c.hhf).length ? "no HHF" : ""}</span>
       </button></li>`).join("") : `<li class="empty">No classifier matches “${esc(q)}”.</li>`;
     $("#list").querySelectorAll("button").forEach((b) => b.addEventListener("click", () => {
       state.code = b.dataset.code;
@@ -260,7 +260,8 @@ footer a { color: inherit; }
     if (c.hhf[state.division] != null) {
       return `<div><div class="label">High hit factor · ${esc(div.name)}</div>
         <div class="hhf-line"><strong>${c.hhf[state.division].toFixed(4)}</strong></div>
-        ${c.hhfSource ? `<p class="note">USPSA's HHF tables don't cover this classifier yet, so this is the current HHF from <a href="${esc(c.hhfSource)}" target="_blank" rel="noopener">hitfactor.info</a>.</p>` : ""}</div>`;
+        ${c.hhfEstimate ? `<p class="note">This is a trial classifier with no official HHF yet, so this is the recommended HHF that <a href="${esc(c.hhfSource)}" target="_blank" rel="noopener">hitfactor.info</a> estimates from scores so far. Treat it as a guide.</p>`
+          : c.hhfSource ? `<p class="note">USPSA's HHF tables don't cover this classifier yet, so this is the current HHF from <a href="${esc(c.hhfSource)}" target="_blank" rel="noopener">hitfactor.info</a>.</p>` : ""}</div>`;
     }
     const saved = state.customHHF[c.code + "/" + state.division] ?? "";
     const why = c.trial ? "This is a trial classifier. USPSA hasn't set high hit factors for it yet."
