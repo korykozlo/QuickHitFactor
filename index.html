@@ -162,7 +162,7 @@ footer a { color: inherit; }
     $("#footer").innerHTML =
       `Stage sheets and diagrams © USPSA, from <a href="${esc(data.source)}" target="_blank" rel="noopener">uspsa.org/classifiers</a>. ` +
       `High hit factors from USPSA's <a href="${esc(data.hhfSource)}" target="_blank" rel="noopener">2025 High Hit Factor tables</a>, ` +
-      `and from <a href="https://www.hitfactor.info" target="_blank" rel="noopener">hitfactor.info</a> for the 25- and 26-series and Limited-10. ` +
+      `and from <a href="https://www.hitfactor.info" target="_blank" rel="noopener">hitfactor.info</a> for the 25-series and Limited-10. 26-series HHFs are worked out from their published class minimums. ` +
       `Retrieved ${esc(data.retrieved)}. Always confirm against USPSA before relying on a number.`;
   }).catch(() => {
     $("#main").innerHTML = `<p class="empty">Couldn't load the classifier data. Reload the page to try again.</p>`;
@@ -260,7 +260,8 @@ footer a { color: inherit; }
     if (c.hhf[state.division] != null) {
       return `<div><div class="label">High hit factor · ${esc(div.name)}</div>
         <div class="hhf-line"><strong>${c.hhf[state.division].toFixed(4)}</strong></div>
-        ${c.hhfEstimate ? `<p class="note">This is a trial classifier with no official HHF yet, so this is the recommended HHF that <a href="${esc(c.hhfSource)}" target="_blank" rel="noopener">hitfactor.info</a> estimates from scores so far. Treat it as a guide.</p>`
+        ${c.hhfFromClassMins ? `<p class="note">Worked out from the published minimum hit factor for each class (GM is 95% of the HHF).</p>`
+          : c.hhfEstimate ? `<p class="note">This is a trial classifier with no official HHF yet, so this is the recommended HHF that <a href="${esc(c.hhfSource)}" target="_blank" rel="noopener">hitfactor.info</a> estimates from scores so far. Treat it as a guide.</p>`
           : state.division === "limited-10" && !c.hhfSource ? `<p class="note">USPSA's HHF tables have no Limited-10 column, so this is the current HHF from <a href="https://www.hitfactor.info/classifiers/l10/${c.code}" target="_blank" rel="noopener">hitfactor.info</a>.</p>`
           : c.hhfSource ? `<p class="note">USPSA's HHF tables don't cover this classifier yet, so this is the current HHF from <a href="${esc(c.hhfSource)}" target="_blank" rel="noopener">hitfactor.info</a>.</p>` : ""}</div>`;
     }

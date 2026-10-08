@@ -5,8 +5,8 @@ Pick a classifier to see its stage diagram, pick a division (and Minor or Major 
 
 ## Data
 - `data/classifiers.json`: the 68 active classifiers from [uspsa.org/classifiers](https://uspsa.org/classifiers), with scoring type, scoring hits, steel count and the high hit factor (HHF) per division.
-- HHFs come from USPSA's [2025 High Hit Factor tables](https://s3.uspsa.io/classification/Classifier%20Committee%20-%202025_Recommended_High_Hit_Factors_and_System_Updates.pdf). That report predates the 25-series, and the 26-series are trial classifiers, so those 14 have no HHF yet; the app lets you type one in.
-- Limited-10 uses the Limited HHFs.
+- HHFs come from USPSA's [2025 High Hit Factor tables](https://s3.uspsa.io/classification/Classifier%20Committee%20-%202025_Recommended_High_Hit_Factors_and_System_Updates.pdf). That report predates the 25-series, so those come from hitfactor.info's current HHF, as does Limited-10 for every classifier.
+- The 26-series (trial) HHFs are worked out from the published minimum hit factor for each class (HHF = GM minimum ÷ 0.95).
 - `diagrams/`: page 1 of each USPSA stage sheet (© USPSA), rendered from `https://uspsa.org/resources/classifiers/<code>.pdf`.
 - `tools/build_data.py` rebuilds both from the downloaded PDFs.
 

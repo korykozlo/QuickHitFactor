@@ -1215,21 +1215,20 @@
       "rounds": 14,
       "scoring": "Comstock",
       "hhf": {
-        "open": 10.1153,
-        "limited": 8.1719,
-        "limited-10": 9.6358,
-        "limited-optics": 9.3064,
-        "carry-optics": 9.2665,
-        "production": 7.8307,
-        "single-stack": 8.0354,
-        "revolver": 5.9399,
-        "pcc": 10.5117
+        "open": 10.1176,
+        "limited": 8.184,
+        "limited-10": 9.6837,
+        "limited-optics": 9.3361,
+        "carry-optics": 9.3041,
+        "production": 7.8402,
+        "single-stack": 8.0465,
+        "revolver": 5.9484,
+        "pcc": 10.5925
       },
       "points": 70,
       "steel": 2,
       "trial": true,
-      "hhfSource": "https://www.hitfactor.info/classifiers/co/26-01",
-      "hhfEstimate": true
+      "hhfFromClassMins": true
     },
     {
       "code": "26-02",
@@ -1239,21 +1238,20 @@
       "rounds": 14,
       "scoring": "Comstock",
       "hhf": {
-        "open": 8.542,
-        "limited": 7.0428,
-        "limited-10": 8.0585,
-        "limited-optics": 7.825,
-        "carry-optics": 7.7972,
-        "production": 6.7538,
-        "single-stack": 6.9272,
-        "revolver": 6.1813,
-        "pcc": 7.9793
+        "open": 8.5778,
+        "limited": 7.0572,
+        "limited-10": 8.098,
+        "limited-optics": 7.85,
+        "carry-optics": 7.8133,
+        "production": 6.7659,
+        "single-stack": 6.9407,
+        "revolver": 6.1907,
+        "pcc": 7.9993
       },
       "points": 70,
       "steel": 2,
       "trial": true,
-      "hhfSource": "https://www.hitfactor.info/classifiers/co/26-02",
-      "hhfEstimate": true
+      "hhfFromClassMins": true
     },
     {
       "code": "26-03",
@@ -1263,21 +1261,20 @@
       "rounds": 10,
       "scoring": "Comstock",
       "hhf": {
-        "open": 9.4201,
-        "limited": 8.6114,
-        "limited-10": 9.2378,
-        "limited-optics": 8.9827,
-        "carry-optics": 8.9799,
-        "production": 8.1893,
-        "single-stack": 8.4426,
-        "revolver": 6.8155,
-        "pcc": 9.6917
+        "open": 9.432,
+        "limited": 8.6549,
+        "limited-10": 9.2201,
+        "limited-optics": 8.9778,
+        "carry-optics": 8.9637,
+        "production": 8.2375,
+        "single-stack": 8.4879,
+        "revolver": 6.8502,
+        "pcc": 9.7258
       },
       "points": 50,
       "steel": 0,
       "trial": true,
-      "hhfSource": "https://www.hitfactor.info/classifiers/co/26-03",
-      "hhfEstimate": true
+      "hhfFromClassMins": true
     },
     {
       "code": "26-04",
@@ -1287,21 +1284,20 @@
       "rounds": 12,
       "scoring": "Comstock",
       "hhf": {
-        "open": 8.8007,
-        "limited": 7.2777,
-        "limited-10": 8.4152,
-        "limited-optics": 8.1078,
-        "carry-optics": 8.1027,
-        "production": 6.9214,
-        "single-stack": 7.1352,
-        "revolver": 6.6644,
-        "pcc": 8.3493
+        "open": 8.8159,
+        "limited": 7.1648,
+        "limited-10": 8.413,
+        "limited-optics": 8.1226,
+        "carry-optics": 8.0958,
+        "production": 6.8009,
+        "single-stack": 7.0193,
+        "revolver": 6.5441,
+        "pcc": 8.3038
       },
       "points": 60,
       "steel": 0,
       "trial": true,
-      "hhfSource": "https://www.hitfactor.info/classifiers/co/26-04",
-      "hhfEstimate": true
+      "hhfFromClassMins": true
     },
     {
       "code": "26-05",
@@ -1311,21 +1307,20 @@
       "rounds": 12,
       "scoring": "Comstock",
       "hhf": {
-        "open": 9.7102,
-        "limited": 7.6411,
-        "limited-10": 9.0428,
-        "limited-optics": 8.6477,
-        "carry-optics": 8.6267,
-        "production": 7.2379,
-        "single-stack": 7.4798,
-        "revolver": 6.9787,
-        "pcc": 9.6442
+        "open": 9.762,
+        "limited": 7.6909,
+        "limited-10": 9.0512,
+        "limited-optics": 8.6415,
+        "carry-optics": 8.6347,
+        "production": 7.2909,
+        "single-stack": 7.5309,
+        "revolver": 7.0287,
+        "pcc": 9.689
       },
       "points": 60,
       "steel": 0,
       "trial": true,
-      "hhfSource": "https://www.hitfactor.info/classifiers/co/26-05",
-      "hhfEstimate": true
+      "hhfFromClassMins": true
     },
     {
       "code": "99-08",
