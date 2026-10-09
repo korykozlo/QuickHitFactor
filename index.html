@@ -282,7 +282,7 @@ td { font-family: var(--font-num); font-size: .95rem; }
         const mhf = QHF.minHitFactor(h, k.min);
         const t = QHF.maxTime(best, mhf);
         return `<tr data-cls="${k.id}" aria-selected="${state.cls === k.id}"><td>${k.id}</td>
-          <td>${k.min}%${next ? `–${next.min}%` : "+"}</td><td>${mhf.toFixed(4)}</td><td>${t.toFixed(2)}s</td></tr>`;
+          <td>${k.min}%</td><td>${mhf.toFixed(4)}</td><td>${t.toFixed(2)}s</td></tr>`;
       }).join("")}</tbody></table></div>
       <p class="note">Pick a class to see every hit combination that makes it.</p>`;
     $("#classes").querySelectorAll("tbody tr").forEach((tr) => tr.addEventListener("click", () => {
