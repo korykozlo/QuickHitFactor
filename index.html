@@ -114,8 +114,6 @@ td { font-family: var(--font-num); font-size: .95rem; }
 .zero { color: var(--muted); opacity: .55; }
 .empty { padding: 24px; text-align: center; color: var(--muted); }
 
-footer { grid-column: 1 / -1; font-size: .8rem; color: var(--muted); }
-footer a { color: inherit; }
 
 @media (max-width: 900px) {
   .app { grid-template-columns: minmax(0, 1fr); }
@@ -142,7 +140,6 @@ footer a { color: inherit; }
     <p class="empty">Loading classifiers…</p>
   </main>
 
-  <footer id="footer"></footer>
 </div>
 
 <script src="calc.js"></script>
@@ -159,11 +156,6 @@ footer a { color: inherit; }
     state.code = data.classifiers.some((c) => c.code === fromHash) ? fromHash : "99-11";
     renderList();
     render();
-    $("#footer").innerHTML =
-      `Stage sheets and diagrams © USPSA, from <a href="${esc(data.source)}" target="_blank" rel="noopener">uspsa.org/classifiers</a>. ` +
-      `High hit factors from USPSA's <a href="${esc(data.hhfSource)}" target="_blank" rel="noopener">2025 High Hit Factor tables</a>, ` +
-      `and from <a href="https://www.hitfactor.info" target="_blank" rel="noopener">hitfactor.info</a> for the 25-series and Limited-10. 26-series HHFs are worked out from their published class minimums. ` +
-      `Retrieved ${esc(data.retrieved)}. Always confirm against USPSA before relying on a number.`;
   }).catch(() => {
     $("#main").innerHTML = `<p class="empty">Couldn't load the classifier data. Reload the page to try again.</p>`;
   });
