@@ -108,7 +108,7 @@ td { font-family: var(--font-num); font-size: .95rem; }
 .combos-head h3 { margin: 0; font: 700 1.5rem var(--font-display); }
 .combos-head select { padding: 6px 8px; border: 1px solid var(--line); border-radius: 4px; background: var(--bg); }
 .combo-table { max-height: 520px; overflow: auto; border: 1px solid var(--line); border-radius: 6px; }
-.combo-table thead th { position: sticky; top: 0; background: var(--panel); }
+.combo-table thead th { position: sticky; top: 0; background: var(--panel); z-index: 1; }
 .combo-table td.m { color: var(--miss); }
 .combo-table td.time { font-weight: 500; }
 .zero { color: var(--muted); opacity: .55; }
@@ -282,7 +282,7 @@ td { font-family: var(--font-num); font-size: .95rem; }
         const mhf = QHF.minHitFactor(h, k.min);
         const t = QHF.maxTime(best, mhf);
         return `<tr data-cls="${k.id}" aria-selected="${state.cls === k.id}"><td>${k.id}</td>
-          <td>${k.min}%${next ? `–${next.min}%` : "+"}</td><td>${mhf.toFixed(4)}</td><td>${t.toFixed(2)}s</td></tr>`;
+          <td>${k.min}%</td><td>${mhf.toFixed(4)}</td><td>${t.toFixed(2)}s</td></tr>`;
       }).join("")}</tbody></table></div>
       <p class="note">Pick a class to see every hit combination that makes it.</p>`;
     $("#classes").querySelectorAll("tbody tr").forEach((tr) => tr.addEventListener("click", () => {
