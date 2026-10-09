@@ -11,7 +11,7 @@ Pick a classifier to see its stage diagram, pick a division (and Minor or Major 
 - `tools/build_data.py` rebuilds both from the downloaded PDFs.
 
 ## Scoring
-- Min HF = HHF × class percentage (GM 95, M 85, A 75, B 60, C 40).
+- Min HF = HHF × class percentage (MAX 110, HHF 100, GM 95, M 85, A 75, B 60, C 40).
 - Points: A 5; C 3 minor / 4 major; D 1 minor / 2 major; miss −10. Steel scores as an A or a miss.
 - Max time = points ÷ min HF, rounded down to 0.01 s. No-shoots and procedurals are not included.
 
