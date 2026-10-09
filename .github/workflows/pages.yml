@@ -34,7 +34,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Collect site files
-        run: mkdir _site && cp -r index.html calc.js data diagrams _site/
+        run: mkdir _site && cp -r index.html calc.js og-image.png data diagrams _site/
       - uses: actions/upload-pages-artifact@v3
         with:
           path: _site
