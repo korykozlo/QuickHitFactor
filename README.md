@@ -12,9 +12,7 @@ Pick a classifier to see its stage diagram, pick a division (and Minor or Major 
 
 ## Member lookup
 Type a USPSA member number to see the hit factor that member needs on the selected classifier and division to move up a class, with the hit/time combinations for it.
-- Scores come straight from the member's classification page on uspsa.org (`uspsa.org/classification/<member number>`). uspsa.org sends no CORS headers, so a small server (`server/`) fetches and parses the page and the app calls it at `api/member/<number>`.
 - The class and average shown are the ones USPSA has on file. The scores decide what the next classifier needs: best 6 of the latest 8 in the division, each counting for at most 110%, a classifier shot again on a later day replacing the earlier attempt, zeros counting, and major matches counting at the member's match percentage. On the same date the higher percentage counts as more recent. Worked out this way, the average matches USPSA's own on the pages tested.
-- uspsa.org sits behind a Cloudflare bot check that turns away requests from some networks (it blocks the cloud machines this was built on). The server never tries to get past it: it reports the lookup as blocked instead.
 
 ## Scoring
 - Min HF = HHF × class percentage (MAX 110, HHF 100, GM 95, M 85, A 75, B 60, C 40).
