@@ -335,7 +335,7 @@ td { font-family: var(--font-num); font-size: .95rem; }
       showMember(); renderTables();
     }).catch((e) => {
       if (seq !== lookupSeq) return;
-      memberInfo = { status: "error", code: e.code };
+      memberInfo = { status: "error", code: e.code, message: e.message };
       if (state.cls === "member") state.cls = "A";
       showMember(); renderTables();
     });
@@ -366,7 +366,8 @@ td { font-family: var(--font-num); font-size: .95rem; }
     note.innerHTML = !m ? ""
       : m.status === "loading" ? "Looking up member…"
       : m.status === "error" ? (m.code === "blocked" ? "uspsa.org turned the lookup away. Try again later."
-        : m.code === "invalid" ? "That isn't a USPSA member number." : "Couldn't reach uspsa.org. Try again in a moment.")
+        : m.code === "invalid" ? "That isn't a USPSA member number."
+        : "Couldn't reach uspsa.org. Try again in a moment.")
       : m.status === "notfound" ? "Member not found."
       : m.status === "unclassed" ? `${who}Unclassed in ${esc(division().name)}${m.count ? ` with ${m.count} classifier score${m.count === 1 ? "" : "s"}` : ""}.${src}`
       : m.status === "gm" ? `${who}GM in ${esc(division().name)}. There's no class above GM.${src}`
@@ -400,9 +401,9 @@ td { font-family: var(--font-num); font-size: .95rem; }
     }
     const best = c.points;
     const t = memberTarget(h, c);
-    if (t && !t.reach && state.preferMember) state.cls = "member";
-    if ((!t || t.reach) && state.cls === "member") state.cls = "A";
-    const targetRow = !t || t.reach ? "" : `<tr class="target" data-cls="member" aria-selected="${state.cls === "member"}"><td>${esc(state.member)} → ${t.cls}</td>
+    if (t && state.preferMember) state.cls = "member";
+    if (!t && state.cls === "member") state.cls = "A";
+    const targetRow = !t ? "" : `<tr class="target" data-cls="member" aria-selected="${state.cls === "member"}"><td>${esc(state.member)} → ${t.cls}</td>
       <td>${t.percent.toFixed(2)}%</td><td>${t.hf ? t.hf.toFixed(4) : "any"}</td><td>${t.hf ? QHF.maxTime(best, t.hf).toFixed(2) + "s" : "–"}</td></tr>`;
     $("#classes").innerHTML = `<div class="scroll"><table class="classes">
       <thead><tr><th>Class</th><th>Score</th><th>Min HF</th><th>Time at all A</th></tr></thead>
@@ -416,7 +417,7 @@ td { font-family: var(--font-num); font-size: .95rem; }
         return `<tr data-cls="${k.id}" aria-selected="${state.cls === k.id}"><td>${k.id}</td>
           <td>${k.min}%</td><td>${mhf.toFixed(4)}</td><td>${t.toFixed(2)}s</td></tr>`;
       }).join("")}</tbody></table></div>
-      <p class="note">${!t ? "" : t.reach ? `One run on ${c.code} can't get ${esc(state.member)} to ${t.cls}: even ${QHF.MAX_PERCENT}% would bring the average to ${t.best.toFixed(4)}%. `
+      <p class="note">${!t ? "" : t.reach ? `One run on ${c.code} mathematically needs ${t.percent.toFixed(2)}% (Min HF ${t.hf.toFixed(4)}) to reach ${t.cls}. Since USPSA caps scores at ${QHF.MAX_PERCENT}%, a max 110% score brings your average to ${t.best.toFixed(4)}% (additional matches will be needed). `
         : `The first row is what ${esc(state.member)} needs on ${c.code} to make ${t.cls}. `}Pick a class to see every hit combination that makes it.</p>`;
     $("#classes").querySelectorAll("tbody tr").forEach((tr) => tr.addEventListener("click", () => {
       state.cls = tr.dataset.cls; state.preferMember = state.cls === "member"; renderTables();
@@ -427,15 +428,17 @@ td { font-family: var(--font-num); font-size: .95rem; }
 
   // The member's needed hit factor on this classifier, or null when there's no target to show.
   // The new score is the newest; it replaces an earlier attempt at the same classifier, otherwise
-  // the oldest of the last 8 drops out. A score counts for at most 110%, so some targets can't be reached.
+  // the oldest of the last 8 drops out.
   function memberTarget(h, c) {
     const m = memberInfo;
     if (!m || m.status !== "target" || m.num !== state.member || m.div !== state.division) return null;
     const percents = m.scores.filter((s) => s.code !== c.code).map((s) => s.p);
     const percent = QHF.neededPercent(percents, m.next.min);
     if (percent == null) return null;
-    if (percent > QHF.MAX_PERCENT) return { cls: m.next.id, reach: true, best: QHF.classAverage([QHF.MAX_PERCENT, ...percents]) };
-    return { cls: m.next.id, percent, hf: QHF.minHitFactor(h, percent) };
+    const hf = QHF.minHitFactor(h, percent);
+    const reach = percent > QHF.MAX_PERCENT;
+    const best = reach ? QHF.classAverage([QHF.MAX_PERCENT, ...percents]) : null;
+    return { cls: m.next.id, percent, hf, reach, best };
   }
 
   function renderCombos(c, h) {

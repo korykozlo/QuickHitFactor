@@ -11,6 +11,8 @@ const fs = require("node:fs");
 const path = require("node:path");
 const { parseClassificationPage, isChallenge } = require("./uspsa.js");
 
+const { execFile } = require("node:child_process");
+
 const ROOT = path.resolve(__dirname, "..");
 const PORT = Number(process.env.PORT) || 8000;
 const ALLOWED_ORIGIN = process.env.ALLOWED_ORIGIN || "*";
@@ -24,25 +26,120 @@ class LookupError extends Error {
   constructor(status, code, message) { super(message); this.status = status; this.code = code; }
 }
 
-async function loadPage(num) {
-  if (PAGES_DIR) {
-    const file = fs.readdirSync(PAGES_DIR).find((f) => f.toUpperCase() === `${num}.HTML`);
-    if (!file) throw new LookupError(404, "notfound", "Member not found.");
-    return fs.readFileSync(path.join(PAGES_DIR, file), "utf8");
+function getPythonBin() {
+  const candidates = [
+    process.env.PYTHON_BIN,
+    path.join(ROOT, ".venv", "bin", "python3"),
+    path.join(ROOT, ".venv", "bin", "python"),
+    path.join(ROOT, "venv", "bin", "python3"),
+    path.join(ROOT, "venv", "bin", "python"),
+    "python3",
+    "python",
+  ].filter(Boolean);
+
+  for (const bin of candidates) {
+    if (bin.includes(path.sep) && fs.existsSync(bin)) return bin;
   }
-  let res;
-  try {
-    res = await fetch(pageUrl(num), {
-      headers: { "User-Agent": USER_AGENT, Accept: "text/html" },
-      signal: AbortSignal.timeout(15000),
+  return "python3";
+}
+
+function scrapeWithPlaywright(num) {
+  return new Promise((resolve, reject) => {
+    const pythonBin = getPythonBin();
+    const script = path.join(ROOT, "tools", "scrape_uspsa.py");
+    execFile(pythonBin, [script, num, "--dump-html"], {
+      maxBuffer: 25 * 1024 * 1024,
+      timeout: 60000,
+    }, (err, stdout, stderr) => {
+      if (err) {
+        console.error("Playwright scraping error:", stderr || err.message);
+        let msg = "Failed to scrape profile via Playwright.";
+        if (stderr && stderr.includes("playwright is required")) {
+          msg = "Playwright is not installed. Setup with: python3 -m venv .venv && .venv/bin/pip install playwright beautifulsoup4 && .venv/bin/playwright install chromium";
+        } else if (stderr && stderr.includes("TimeoutError")) {
+          msg = "Scraping timed out waiting for USPSA page to load.";
+        } else if (stderr) {
+          const lines = stderr.trim().split("\n");
+          msg = lines[lines.length - 1] || msg;
+        }
+        return reject(new LookupError(502, "scrape_error", msg));
+      }
+      resolve(stdout);
     });
-  } catch {
-    throw new LookupError(502, "unreachable", "Couldn't reach uspsa.org.");
+  });
+}
+
+const PAGE_CACHE_HOURS = Number(process.env.PAGE_CACHE_HOURS) || 24;
+const PAGE_CACHE_MS = PAGE_CACHE_HOURS * 60 * 60 * 1000;
+
+async function loadPage(num) {
+  const dir = PAGES_DIR || path.join(ROOT, "data", "pages");
+  let cachedFile = null;
+  let cachedHtml = null;
+
+  if (fs.existsSync(dir)) {
+    const file = fs.readdirSync(dir).find((f) => f.toUpperCase() === `${num}.HTML`);
+    if (file) {
+      cachedFile = path.join(dir, file);
+      cachedHtml = fs.readFileSync(cachedFile, "utf8");
+      // Static test fixtures or custom PAGES_DIR do not expire
+      if (PAGES_DIR) return cachedHtml;
+
+      const stat = fs.statSync(cachedFile);
+      const isFresh = (Date.now() - stat.mtimeMs) < PAGE_CACHE_MS;
+      if (isFresh) return cachedHtml;
+    }
+    if (PAGES_DIR) throw new LookupError(404, "notfound", "Member not found.");
   }
-  const html = await res.text();
-  if (isChallenge(res.status, html)) throw new LookupError(502, "blocked", "uspsa.org turned the request away with a bot check.");
-  if (res.status === 404) throw new LookupError(404, "notfound", "Member not found.");
-  if (!res.ok) throw new LookupError(502, "upstream", `uspsa.org answered ${res.status}.`);
+
+  let html = null;
+  let blocked = false;
+  try {
+    const res = await fetch(pageUrl(num), {
+      headers: { "User-Agent": USER_AGENT, Accept: "text/html" },
+      signal: AbortSignal.timeout(6000),
+    });
+    const text = await res.text();
+    if (isChallenge(res.status, text)) {
+      blocked = true;
+    } else if (res.status === 404) {
+      throw new LookupError(404, "notfound", "Member not found.");
+    } else if (res.ok) {
+      html = text;
+    }
+  } catch (e) {
+    if (e instanceof LookupError) throw e;
+    blocked = true;
+  }
+
+  // If simple HTTP fetch was blocked by Cloudflare, scrape using Playwright
+  if (!html && blocked) {
+    try {
+      html = await scrapeWithPlaywright(num);
+    } catch (e) {
+      // If live scraping fails but an older cached copy exists, fall back to it
+      if (cachedHtml) {
+        console.warn(`Scrape failed for ${num}; serving stale cached file.`);
+        return cachedHtml;
+      }
+      if (e instanceof LookupError) throw e;
+      throw new LookupError(502, "blocked", "uspsa.org blocked the request and scraping failed.");
+    }
+  }
+
+  if (!html) {
+    if (cachedHtml) return cachedHtml;
+    throw new LookupError(502, "unreachable", "Couldn't retrieve profile from uspsa.org.");
+  }
+
+  // Cache to data/pages/<NUM>.html for fast subsequent lookups
+  if (!PAGES_DIR) {
+    try {
+      fs.mkdirSync(dir, { recursive: true });
+      fs.writeFileSync(path.join(dir, `${num}.html`), html, "utf8");
+    } catch {}
+  }
+
   return html;
 }
 
