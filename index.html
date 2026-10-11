@@ -328,6 +328,7 @@ td { font-family: var(--font-num); font-size: .95rem; }
       .map((m) => ({ date: m.date.slice(0, 10), p: m.matchPercent }));
     return [...classifiers, ...majors]
       .filter((x) => x.p > 0)
+      .map((x) => ({ ...x, p: Math.min(QHF.MAX_PERCENT, x.p) }))
       .sort((a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : b.p - a.p))
       .map((x) => x.p);
   }
@@ -384,8 +385,13 @@ td { font-family: var(--font-num); font-size: .95rem; }
     if (percents.length >= 6 && rank(hq) >= 0 && rank(hq) < rank(cls)) cls = hq;
     const next = QHF.nextClass(cls);
     if (!next) return { ...base, status: "gm", avg, cls };
-    return { ...base, status: "target", avg, cls, unclassed: percents.length < 6, next,
-      percent: QHF.neededPercent(percents, next.min) };
+    const percent = QHF.neededPercent(percents, next.min);
+    // A classifier counts for at most 100%, so a target above that can't be reached in one score.
+    if (percent > QHF.MAX_PERCENT) {
+      return { ...base, status: "reach", avg, cls, unclassed: percents.length < 6, next,
+        best: QHF.classAverage([QHF.MAX_PERCENT, ...percents]) };
+    }
+    return { ...base, status: "target", avg, cls, unclassed: percents.length < 6, next, percent };
   }
 
   function showMember() {
@@ -399,8 +405,9 @@ td { font-family: var(--font-num); font-size: .95rem; }
       : m.status === "error" ? "Couldn't reach hitfactor.info. Try again in a moment."
       : m.status === "notfound" ? "Member not found."
       : m.status === "unclassed" ? `Member is unclassed.${m.count ? ` ${who}${m.count} classifier score${m.count === 1 ? "" : "s"} in ${esc(division().name)}.` : ""}${src}`
-      : m.status === "gm" ? `${who}GM in ${esc(division().name)} (${m.avg.toFixed(2)}%). There's no class above GM.${src}`
-      : m.unclassed ? `${who}Unclassed in ${esc(division().name)} with 5 scores (average ${m.avg.toFixed(2)}%). The 6th sets the class.${src}`
+      : m.status === "reach" ? `${who}${m.unclassed ? `Unclassed in ${esc(division().name)} with 5 scores (average ${m.avg.toFixed(4)}%)` : `${m.cls} in ${esc(division().name)} (best 6 of last 8: ${m.avg.toFixed(4)}%)`}. One classifier can't make ${m.next.id}: even 100% would bring the average to ${m.best.toFixed(4)}%.${src}`
+      : m.status === "gm" ? `${who}GM in ${esc(division().name)} (${m.avg.toFixed(4)}%). There's no class above GM.${src}`
+      : m.unclassed ? `${who}Unclassed in ${esc(division().name)} with 5 scores (average ${m.avg.toFixed(4)}%). The 6th sets the class.${src}`
       : `${who}${m.cls} in ${esc(division().name)} (best 6 of last 8: ${m.avg.toFixed(4)}%).${src}`;
   }
 

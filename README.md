@@ -14,7 +14,8 @@ Pick a classifier to see its stage diagram, pick a division (and Minor or Major 
 Type a USPSA member number to see the hit factor that member needs on the selected classifier and division to move up a class, with the hit/time combinations for it.
 - Scores come from [hitfactor.info](https://www.hitfactor.info)'s open API (`/api/shooters/<division>/<member>`), which mirrors classifier scores uploaded to PractiScore. uspsa.org's classification pages sit behind a bot challenge and send no CORS headers, so a page on another site can't read them.
 - hitfactor.info's own percentages don't match USPSA's, so each classifier's percentage is worked out here as HF ÷ this app's HHF (this matches the percentages on uspsa.org). Major matches (level II and up) count too, using the member's match percentage from hitfactor.info's Majors tab (`/api/matches/matchScores`).
-- Class = average of the best 6 of the latest 8 of those scores in the division; on the same date the higher percentage counts as more recent. Under 5 scores is unclassed; with 5, the 6th score sets the class, and the target is the class above their 5-score average.
+- Class = average of the best 6 of the latest 8 of those scores in the division; on the same date the higher percentage counts as more recent.
+- Each score counts for at most 100% (hitfactor.info's own "uncapped" classification is the exception that shows USPSA's is capped). So when the next class needs more than 100% on one classifier, the page says so instead of listing a hit factor above the HHF. Under 5 scores is unclassed; with 5, the 6th score sets the class, and the target is the class above their 5-score average.
 - USPSA never moves a member down, so the class USPSA has on record (as hitfactor.info reports it) wins when it's higher.
 
 ## Scoring
