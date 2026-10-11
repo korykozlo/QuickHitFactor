@@ -288,7 +288,8 @@ td { font-family: var(--font-num); font-size: .95rem; }
   }
 
   // Member lookup. uspsa.org can't be read from another site's page (bot challenge, no CORS),
-  // so scores come from hitfactor.info's open API, which mirrors PractiScore classifier uploads.
+  // so scores come from hitfactor.info's open API, which mirrors PractiScore uploads. Its percentages
+  // don't match USPSA's, so classifier percentages are worked out here from each score's HF.
   const HF_DIV = { open: "opn", limited: "ltd", "limited-10": "l10", "limited-optics": "lo", "carry-optics": "co",
     production: "prod", "single-stack": "ss", revolver: "rev", pcc: "pcc" };
   const lookups = new Map();
@@ -296,8 +297,12 @@ td { font-family: var(--font-num); font-size: .95rem; }
   function fetchMember(num, div) {
     const key = num + "/" + div;
     if (!lookups.has(key)) {
-      const url = `https://www.hitfactor.info/api/shooters/${HF_DIV[div]}/${encodeURIComponent(num)}`;
-      const p = fetch(url).then((r) => { if (!r.ok) throw new Error(r.status); return r.json(); });
+      const api = "https://www.hitfactor.info/api";
+      const get = (url) => fetch(url).then((r) => { if (!r.ok) throw new Error(r.status); return r.json(); });
+      const p = Promise.all([
+        get(`${api}/shooters/${HF_DIV[div]}/${encodeURIComponent(num)}`),
+        get(`${api}/matches/matchScores?memberNumber=${encodeURIComponent(num)}&division=${HF_DIV[div]}`),
+      ]).then(([shooter, matches]) => ({ ...shooter, matches: Array.isArray(matches) ? matches : [] }));
       p.catch(() => lookups.delete(key)); // let a failed lookup be retried
       lookups.set(key, p);
     }
@@ -306,17 +311,25 @@ td { font-family: var(--font-num); font-size: .95rem; }
 
   const found = (j) => !!(j && j.info && j.info.memberNumber && j.info.memberNumber !== "N/A");
 
-  // Classifier percentages in this division, newest first. Scored against this app's HHFs where it
-  // has one (so 26-series count), otherwise the percentage hitfactor.info recorded.
+  // Classification percentages in this division, newest first, the way USPSA counts them:
+  // - classifiers: HF ÷ this app's HHF (matches USPSA's own percentage), or hitfactor.info's
+  //   percentage for a classifier this app has no HHF for;
+  // - major matches (level II and up): the member's match percentage, from hitfactor.info's Majors tab.
+  // On the same date USPSA ranks the higher percentage as the more recent.
   function memberPercents(j, div) {
-    return (j.classifiers || [])
+    const classifiers = (j.classifiers || [])
       .filter((s) => s.source === "Stage Score" && s.hf > 0)
-      .sort((a, b) => (a.sd < b.sd ? 1 : a.sd > b.sd ? -1 : 0))
       .map((s) => {
         const h = state.data.classifiers.find((c) => c.code === s.classifier)?.hhf[div];
-        return h ? (100 * s.hf) / h : s.percent;
-      })
-      .filter((p) => p > 0);
+        return { date: s.sd.slice(0, 10), p: h ? (100 * s.hf) / h : s.percent };
+      });
+    const majors = (j.matches || [])
+      .filter((m) => m.level >= 2 && m.matchPercent > 0)
+      .map((m) => ({ date: m.date.slice(0, 10), p: m.matchPercent }));
+    return [...classifiers, ...majors]
+      .filter((x) => x.p > 0)
+      .sort((a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : b.p - a.p))
+      .map((x) => x.p);
   }
 
   // What the member needs: { status: "loading" | "error" | "notfound" | "unclassed" | "gm" | "target", ... }
@@ -388,7 +401,7 @@ td { font-family: var(--font-num); font-size: .95rem; }
       : m.status === "unclassed" ? `Member is unclassed.${m.count ? ` ${who}${m.count} classifier score${m.count === 1 ? "" : "s"} in ${esc(division().name)}.` : ""}${src}`
       : m.status === "gm" ? `${who}GM in ${esc(division().name)} (${m.avg.toFixed(2)}%). There's no class above GM.${src}`
       : m.unclassed ? `${who}Unclassed in ${esc(division().name)} with 5 scores (average ${m.avg.toFixed(2)}%). The 6th sets the class.${src}`
-      : `${who}${m.cls} in ${esc(division().name)} (best 6 of last 8: ${m.avg.toFixed(2)}%).${src}`;
+      : `${who}${m.cls} in ${esc(division().name)} (best 6 of last 8: ${m.avg.toFixed(4)}%).${src}`;
   }
 
   function hhfBlock(c, div) {
