@@ -71,7 +71,22 @@
     return Math.max(0, BEST * target - top);
   }
 
-  const api = { POINTS, MISS_PENALTY, minHitFactor, maxTime, combinations, CLASSES, MAX_PERCENT, classFor, nextClass, classAverage, neededPercent };
+  // The scores that count toward a class, newest first, from a division's scores on uspsa.org
+  // ({ date: "YYYY-MM-DD", code, percent, flag }; code is null for a major match). USPSA's rules:
+  // each score counts for at most 110%; a classifier shot again on a later day replaces the earlier
+  // attempt (flag M, applied here too for scores USPSA hasn't processed yet); zeros still count.
+  // On the same date the higher percentage counts as more recent.
+  function countedScores(scores) {
+    const kept = (scores || []).filter((s) => s.flag !== "M" && s.date && typeof s.percent === "number" && s.percent >= 0);
+    const latest = {};
+    for (const s of kept) if (s.code && (!latest[s.code] || s.date > latest[s.code])) latest[s.code] = s.date;
+    return kept
+      .filter((s) => !s.code || s.date === latest[s.code])
+      .map((s) => ({ date: s.date, code: s.code, p: Math.min(MAX_PERCENT, s.percent) }))
+      .sort((a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : b.p - a.p));
+  }
+
+  const api = { POINTS, MISS_PENALTY, minHitFactor, maxTime, combinations, CLASSES, MAX_PERCENT, classFor, nextClass, classAverage, neededPercent, countedScores };
   if (typeof module !== "undefined" && module.exports) module.exports = api;
   else root.QHF = api;
 })(typeof window !== "undefined" ? window : globalThis);
