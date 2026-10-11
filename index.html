@@ -129,6 +129,15 @@ td { font-family: var(--font-num); font-size: .95rem; }
 .zero { color: var(--muted); opacity: .55; }
 .empty { padding: 24px; text-align: center; color: var(--muted); }
 
+/* Member lookup */
+.member input { width: 12em; max-width: 100%; padding: 6px 8px; border: 1px solid var(--line); border-radius: 4px;
+  background: var(--bg); font-family: var(--font-num); text-transform: uppercase; }
+.member input::placeholder { text-transform: none; }
+.member .note { margin-top: 6px; font-size: .85rem; }
+.member .note a, .combos .note a { color: var(--steel); }
+.classes tr.target td { background: var(--steel-soft); }
+.classes tr.target td:first-child { font-size: 1rem; }
+
 
 @media (max-width: 900px) {
   .app { grid-template-columns: minmax(0, 1fr); }
@@ -162,7 +171,7 @@ td { font-family: var(--font-num); font-size: .95rem; }
 (function () {
   const $ = (s, el = document) => el.querySelector(s);
   const esc = (s) => String(s).replace(/[&<>"]/g, (ch) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[ch]));
-  const state = { data: null, code: null, division: "carry-optics", pf: "minor", cls: "A", misses: "0", customHHF: {} };
+  const state = { data: null, code: null, division: "carry-optics", pf: "minor", cls: "A", misses: "0", customHHF: {}, member: "" };
 
   // Revalidate on every load so a data update shows up without waiting out the browser cache.
   fetch("data/classifiers.json", { cache: "no-cache" }).then((r) => r.json()).then((data) => {
@@ -231,6 +240,12 @@ td { font-family: var(--font-num); font-size: .95rem; }
           <figcaption>Stage sheet © USPSA · tap to enlarge</figcaption>
         </figure>
         <div class="panel">
+          <div class="member">
+            <label class="label" for="member-input">USPSA member number</label>
+            <div class="hhf-line"><input id="member-input" type="text" autocomplete="off" autocapitalize="characters" spellcheck="false"
+              placeholder="e.g. A123456" value="${esc(state.member)}"></div>
+            <p class="note" id="member-note" aria-live="polite"></p>
+          </div>
           <div>
             <div class="label">Division</div>
             <div class="seg" id="divs">${state.data.divisions.map((d) =>
@@ -250,7 +265,10 @@ td { font-family: var(--font-num); font-size: .95rem; }
       </div>
       <section class="combos panel" id="combos"></section>`;
 
-    $("#divs").querySelectorAll("button").forEach((b) => b.addEventListener("click", () => { state.division = b.dataset.div; render(); }));
+    $("#divs").querySelectorAll("button").forEach((b) => b.addEventListener("click", () => {
+      state.division = b.dataset.div; render();
+      if (state.member) refreshMember();
+    }));
     $("#pfs").querySelectorAll("button").forEach((b) => b.addEventListener("click", () => { state.pf = b.dataset.pf; render(); }));
     const hin = $("#hhf-input");
     if (hin) hin.addEventListener("input", () => {
@@ -259,7 +277,118 @@ td { font-family: var(--font-num); font-size: .95rem; }
       if (v > 0) state.customHHF[key] = v; else delete state.customHHF[key];
       renderTables();
     });
+    showMember();
+    let typing;
+    $("#member-input").addEventListener("input", (e) => {
+      clearTimeout(typing);
+      typing = setTimeout(() => setMember(e.target.value), 400);
+    });
+    $("#member-input").addEventListener("change", (e) => { clearTimeout(typing); setMember(e.target.value); });
     renderTables();
+  }
+
+  // Member lookup. uspsa.org can't be read from another site's page (bot challenge, no CORS),
+  // so scores come from hitfactor.info's open API, which mirrors PractiScore classifier uploads.
+  const HF_DIV = { open: "opn", limited: "ltd", "limited-10": "l10", "limited-optics": "lo", "carry-optics": "co",
+    production: "prod", "single-stack": "ss", revolver: "rev", pcc: "pcc" };
+  const lookups = new Map();
+
+  function fetchMember(num, div) {
+    const key = num + "/" + div;
+    if (!lookups.has(key)) {
+      const url = `https://www.hitfactor.info/api/shooters/${HF_DIV[div]}/${encodeURIComponent(num)}`;
+      const p = fetch(url).then((r) => { if (!r.ok) throw new Error(r.status); return r.json(); });
+      p.catch(() => lookups.delete(key)); // let a failed lookup be retried
+      lookups.set(key, p);
+    }
+    return lookups.get(key);
+  }
+
+  const found = (j) => !!(j && j.info && j.info.memberNumber && j.info.memberNumber !== "N/A");
+
+  // Classifier percentages in this division, newest first. Scored against this app's HHFs where it
+  // has one (so 26-series count), otherwise the percentage hitfactor.info recorded.
+  function memberPercents(j, div) {
+    return (j.classifiers || [])
+      .filter((s) => s.source === "Stage Score" && s.hf > 0)
+      .sort((a, b) => (a.sd < b.sd ? 1 : a.sd > b.sd ? -1 : 0))
+      .map((s) => {
+        const h = state.data.classifiers.find((c) => c.code === s.classifier)?.hhf[div];
+        return h ? (100 * s.hf) / h : s.percent;
+      })
+      .filter((p) => p > 0);
+  }
+
+  // What the member needs: { status: "loading" | "error" | "notfound" | "unclassed" | "gm" | "target", ... }
+  let memberInfo = null;
+  let lookupSeq = 0;
+
+  function setMember(raw) {
+    const num = raw.trim().replace(/\s+/g, "").toUpperCase();
+    if (num === state.member && memberInfo && memberInfo.status !== "error") return;
+    state.member = num;
+    if (!num && state.cls === "member") state.cls = "A";
+    refreshMember();
+  }
+
+  function refreshMember() {
+    const num = state.member;
+    const div = state.division;
+    const seq = ++lookupSeq;
+    if (!num) { memberInfo = null; showMember(); renderTables(); return; }
+    memberInfo = { status: "loading" };
+    showMember();
+    fetchMember(num, div).then((j) => {
+      if (found(j)) return j;
+      // No scores in this division; check the rest to tell "unclassed here" from "not found".
+      const others = Object.keys(HF_DIV).filter((d) => d !== div);
+      return Promise.all(others.map((d) => fetchMember(num, d).catch(() => null)))
+        .then((all) => (all.some(found) ? { info: { memberNumber: num }, classifiers: [] } : null));
+    }).then((j) => {
+      if (seq !== lookupSeq) return;
+      memberInfo = j ? summarize(j, num, div) : { status: "notfound" };
+      if (memberInfo.status === "target" && state.cls !== "member") state.cls = "member";
+      if (memberInfo.status !== "target" && state.cls === "member") state.cls = "A";
+      showMember(); renderTables();
+    }).catch(() => {
+      if (seq !== lookupSeq) return;
+      memberInfo = { status: "error" };
+      if (state.cls === "member") state.cls = "A";
+      showMember(); renderTables();
+    });
+  }
+
+  function summarize(j, num, div) {
+    const percents = memberPercents(j, div);
+    const base = { num, div, name: j.info.name, count: percents.length,
+      link: `https://www.hitfactor.info/shooters/${HF_DIV[div]}/${encodeURIComponent(num)}` };
+    if (percents.length < 5) return { ...base, status: "unclassed" };
+    const avg = percents.length >= 6 ? QHF.classAverage(percents) : percents.reduce((t, p) => t + p, 0) / 5;
+    let cls = QHF.classFor(avg);
+    // USPSA never moves a member down a class, so keep the class USPSA has on record if it's higher.
+    const rank = (id) => QHF.CLASSES.findIndex(([k]) => k === id);
+    const hq = j.info.hqClass;
+    if (percents.length >= 6 && rank(hq) >= 0 && rank(hq) < rank(cls)) cls = hq;
+    const next = QHF.nextClass(cls);
+    if (!next) return { ...base, status: "gm", avg, cls };
+    return { ...base, status: "target", avg, cls, unclassed: percents.length < 6, next,
+      percent: QHF.neededPercent(percents, next.min) };
+  }
+
+  function showMember() {
+    const note = $("#member-note");
+    if (!note) return;
+    const m = memberInfo;
+    const who = m && m.name ? `${esc(m.name)} · ` : "";
+    const src = m && m.link && m.count ? ` <a href="${m.link}" target="_blank" rel="noopener">Scores from hitfactor.info</a>.` : "";
+    note.innerHTML = !m ? ""
+      : m.status === "loading" ? "Looking up member…"
+      : m.status === "error" ? "Couldn't reach hitfactor.info. Try again in a moment."
+      : m.status === "notfound" ? "Member not found."
+      : m.status === "unclassed" ? `Member is unclassed.${m.count ? ` ${who}${m.count} classifier score${m.count === 1 ? "" : "s"} in ${esc(division().name)}.` : ""}${src}`
+      : m.status === "gm" ? `${who}GM in ${esc(division().name)} (${m.avg.toFixed(2)}%). There's no class above GM.${src}`
+      : m.unclassed ? `${who}Unclassed in ${esc(division().name)} with 5 scores (average ${m.avg.toFixed(2)}%). The 6th sets the class.${src}`
+      : `${who}${m.cls} in ${esc(division().name)} (best 6 of last 8: ${m.avg.toFixed(2)}%).${src}`;
   }
 
   function hhfBlock(c, div) {
@@ -287,9 +416,13 @@ td { font-family: var(--font-num); font-size: .95rem; }
       return;
     }
     const best = c.points;
+    const t = memberTarget(h);
+    if (!t && state.cls === "member") state.cls = "A";
+    const targetRow = !t ? "" : `<tr class="target" data-cls="member" aria-selected="${state.cls === "member"}"><td>${esc(state.member)} → ${t.cls}</td>
+      <td>${t.percent.toFixed(2)}%</td><td>${t.hf ? t.hf.toFixed(4) : "any"}</td><td>${t.hf ? QHF.maxTime(best, t.hf).toFixed(2) + "s" : "–"}</td></tr>`;
     $("#classes").innerHTML = `<div class="scroll"><table class="classes">
       <thead><tr><th>Class</th><th>Score</th><th>Min HF</th><th>Time at all A</th></tr></thead>
-      <tbody>${state.data.classes.map((k) => {
+      <tbody>${targetRow}${state.data.classes.map((k) => {
         const next = state.data.classes[state.data.classes.indexOf(k) - 1];
         if (k.min === 0) {
           return `<tr data-cls="D" aria-selected="${state.cls === "D"}"><td>D</td><td>under ${next.min}%</td><td>–</td><td>–</td></tr>`;
@@ -299,7 +432,7 @@ td { font-family: var(--font-num); font-size: .95rem; }
         return `<tr data-cls="${k.id}" aria-selected="${state.cls === k.id}"><td>${k.id}</td>
           <td>${k.min}%</td><td>${mhf.toFixed(4)}</td><td>${t.toFixed(2)}s</td></tr>`;
       }).join("")}</tbody></table></div>
-      <p class="note">Pick a class to see every hit combination that makes it.</p>`;
+      <p class="note">${t ? `The first row is what ${esc(state.member)} needs on ${c.code} to make ${t.cls}. ` : ""}Pick a class to see every hit combination that makes it.</p>`;
     $("#classes").querySelectorAll("tbody tr").forEach((tr) => tr.addEventListener("click", () => {
       state.cls = tr.dataset.cls; renderTables();
       $("#combos").scrollIntoView({ block: "nearest" });
@@ -307,9 +440,22 @@ td { font-family: var(--font-num); font-size: .95rem; }
     renderCombos(c, h);
   }
 
+  // The member's needed hit factor on this classifier, or null when there's no target to show.
+  function memberTarget(h) {
+    const m = memberInfo;
+    if (!m || m.status !== "target" || m.num !== state.member || m.div !== state.division || m.percent == null) return null;
+    return { cls: m.next.id, percent: m.percent, hf: QHF.minHitFactor(h, m.percent) };
+  }
+
   function renderCombos(c, h) {
-    const k = state.data.classes.find((x) => x.id === state.cls);
+    const t = state.cls === "member" ? memberTarget(h) : null;
+    const k = t ? { id: t.cls, min: t.percent, member: true } : state.data.classes.find((x) => x.id === state.cls);
     const box = $("#combos");
+    if (t && !t.hf) {
+      box.innerHTML = `<div class="combos-head"><h3>${t.cls} for ${esc(state.member)}</h3></div>
+        <p class="note">Any score on ${c.code} makes ${t.cls}: the oldest of the last 8 scores drops out and that's enough on its own.</p>`;
+      return;
+    }
     if (k.min === 0) {
       box.innerHTML = `<div class="combos-head"><h3>D class</h3></div>
         <p class="note">Any score below ${state.data.classes.at(-2).min}% of the high hit factor lands in D, so there's no time to beat.</p>`;
@@ -322,14 +468,14 @@ td { font-family: var(--font-num); font-size: .95rem; }
     const cell = (n, cls = "") => `<td class="${n ? cls : "zero"}">${n}</td>`;
     box.innerHTML = `
       <div class="combos-head">
-        <h3>${k.id} on ${c.code} · ${esc(division().name)}${division().major ? ` ${pf() === "major" ? "Major" : "Minor"}` : ""}</h3>
+        <h3>${k.id}${k.member ? ` for ${esc(state.member)}` : ""} on ${c.code} · ${esc(division().name)}${division().major ? ` ${pf() === "major" ? "Major" : "Minor"}` : ""}</h3>
         <label class="note">Misses
           <select id="misses">
             ${["0", "1", "2", "3", "all"].map((m) => `<option value="${m}" ${state.misses === m ? "selected" : ""}>${m === "all" ? "Any number" : m === "0" ? "None" : "Up to " + m}</option>`).join("")}
           </select>
         </label>
       </div>
-      <p class="note">Hit factor ${mhf.toFixed(4)} or better. A = ${v.A}, C = ${v.C}, D = ${v.D}, miss = −10.
+      <p class="note">Hit factor ${mhf.toFixed(4)} or better${k.member ? ` (${k.min.toFixed(2)}% of the HHF)` : ""}. A = ${v.A}, C = ${v.C}, D = ${v.D}, miss = −10.
         ${c.steel ? `${c.steel} of the ${c.rounds} hits are steel, which score as an A or a miss.` : ""}
         Times are the slowest that still make ${k.id}. No-shoots and procedurals aren't counted.</p>
       <div class="combo-table"><table>

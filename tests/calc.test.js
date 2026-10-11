@@ -37,3 +37,28 @@ test("steel can only be an A or a miss", () => {
   // 1 paper + 1 steel: never two C or D hits
   assert.ok(combinations(2, 1, "minor").every((r) => r.c + r.d <= 1));
 });
+
+test("classification averages the best 6 of the latest 8", () => {
+  const { classAverage, classFor } = require("../calc.js");
+  assert.strictEqual(classAverage([50, 60, 70, 80, 90]), null);
+  // newest first; the 9th score (100) is outside the window, 10 and 20 are the two dropped
+  assert.strictEqual(classAverage([60, 60, 60, 60, 10, 20, 60, 60, 100]), 60);
+  assert.strictEqual(classFor(95), "GM");
+  assert.strictEqual(classFor(84.99), "A");
+  assert.strictEqual(classFor(12), "D");
+});
+
+test("needed percent is the lowest next score that reaches the target", () => {
+  const { neededPercent, classAverage } = require("../calc.js");
+  // 5 scores: the 6th makes the average, so (5 x 70 + s) / 6 = 75 -> s = 100
+  assert.strictEqual(neededPercent([70, 70, 70, 70, 70], 75), 100);
+  assert.strictEqual(neededPercent([70, 70, 70, 70], 75), null);
+  // 8 scores: the oldest (30) drops out, the new score replaces the worst of the rest
+  const scores = [70, 70, 70, 70, 70, 50, 50, 30];
+  const s = neededPercent(scores, 75);
+  assert.strictEqual(s, 6 * 75 - 5 * 70);
+  assert.ok(classAverage([s, ...scores]) >= 75 - 1e-9);
+  assert.ok(classAverage([s - 0.01, ...scores]) < 75);
+  // dropping a low oldest score can be enough on its own
+  assert.strictEqual(neededPercent([80, 80, 80, 80, 80, 80, 80, 10], 75), 0);
+});

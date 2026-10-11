@@ -38,7 +38,39 @@
     return rows;
   }
 
-  const api = { POINTS, MISS_PENALTY, minHitFactor, maxTime, combinations };
+  // Classification: best 6 of the latest 8 classifier percentages in a division.
+  const CLASSES = [["GM", 95], ["M", 85], ["A", 75], ["B", 60], ["C", 40], ["D", 0]];
+  const WINDOW = 8;
+  const BEST = 6;
+
+  function classFor(percent) {
+    return CLASSES.find(([, min]) => percent >= min)[0];
+  }
+
+  // The class above this one, or null for GM.
+  function nextClass(cls) {
+    const i = CLASSES.findIndex(([id]) => id === cls);
+    return i > 0 ? { id: CLASSES[i - 1][0], min: CLASSES[i - 1][1] } : null;
+  }
+
+  // Average of the best 6 of the latest 8 (percents are newest first). null when unclassed.
+  function classAverage(percents) {
+    const best = percents.slice(0, WINDOW).sort((a, b) => b - a).slice(0, BEST);
+    return best.length < BEST ? null : best.reduce((t, p) => t + p, 0) / BEST;
+  }
+
+  // Lowest percentage on the next classifier that lifts the average to target.
+  // The new score becomes the newest, so only the latest 7 existing scores stay in the window.
+  // Returns 0 when any score does it, null when one more score can't make 6.
+  function neededPercent(percents, target) {
+    const others = percents.slice(0, WINDOW - 1).sort((a, b) => b - a);
+    if (others.length < BEST - 1) return null;
+    if (others.length >= BEST && classAverage(others) >= target) return 0;
+    const top = others.slice(0, BEST - 1).reduce((t, p) => t + p, 0);
+    return Math.max(0, BEST * target - top);
+  }
+
+  const api = { POINTS, MISS_PENALTY, minHitFactor, maxTime, combinations, CLASSES, classFor, nextClass, classAverage, neededPercent };
   if (typeof module !== "undefined" && module.exports) module.exports = api;
   else root.QHF = api;
 })(typeof window !== "undefined" ? window : globalThis);
