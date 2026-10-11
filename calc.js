@@ -41,6 +41,7 @@
   // Classification: best 6 of the latest 8 classifier percentages in a division.
   const CLASSES = [["GM", 95], ["M", 85], ["A", 75], ["B", 60], ["C", 40], ["D", 0]];
   const WINDOW = 8;
+  const MAX_PERCENT = 110; // USPSA records no score above 110% of the HHF
   const BEST = 6;
 
   function classFor(percent) {
@@ -70,7 +71,7 @@
     return Math.max(0, BEST * target - top);
   }
 
-  const api = { POINTS, MISS_PENALTY, minHitFactor, maxTime, combinations, CLASSES, classFor, nextClass, classAverage, neededPercent };
+  const api = { POINTS, MISS_PENALTY, minHitFactor, maxTime, combinations, CLASSES, MAX_PERCENT, classFor, nextClass, classAverage, neededPercent };
   if (typeof module !== "undefined" && module.exports) module.exports = api;
   else root.QHF = api;
 })(typeof window !== "undefined" ? window : globalThis);

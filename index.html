@@ -311,25 +311,28 @@ td { font-family: var(--font-num); font-size: .95rem; }
 
   const found = (j) => !!(j && j.info && j.info.memberNumber && j.info.memberNumber !== "N/A");
 
-  // Classification percentages in this division, newest first, the way USPSA counts them:
+  // Classification scores in this division, newest first, the way USPSA counts them:
   // - classifiers: HF ÷ this app's HHF (matches USPSA's own percentage), or hitfactor.info's
-  //   percentage for a classifier this app has no HHF for;
+  //   percentage for a classifier this app has no HHF for. A zero still takes its place.
   // - major matches (level II and up): the member's match percentage, from hitfactor.info's Majors tab.
-  // On the same date USPSA ranks the higher percentage as the more recent.
-  function memberPercents(j, div) {
+  // Each score counts for at most 110%. A classifier shot again on a later day replaces the
+  // earlier attempt ("most recent override"). On the same date the higher percentage counts as more recent.
+  function memberScores(j, div) {
     const classifiers = (j.classifiers || [])
-      .filter((s) => s.source === "Stage Score" && s.hf > 0)
+      .filter((s) => s.source === "Stage Score" && s.hf >= 0)
       .map((s) => {
         const h = state.data.classifiers.find((c) => c.code === s.classifier)?.hhf[div];
-        return { date: s.sd.slice(0, 10), p: h ? (100 * s.hf) / h : s.percent };
+        return { date: s.sd.slice(0, 10), code: s.classifier, p: h ? (100 * s.hf) / h : s.percent };
       });
+    const latest = {};
+    for (const s of classifiers) if (!latest[s.code] || s.date > latest[s.code]) latest[s.code] = s.date;
     const majors = (j.matches || [])
       .filter((m) => m.level >= 2 && m.matchPercent > 0)
-      .map((m) => ({ date: m.date.slice(0, 10), p: m.matchPercent }));
-    return [...classifiers, ...majors]
-      .filter((x) => x.p > 0)
-      .sort((a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : b.p - a.p))
-      .map((x) => x.p);
+      .map((m) => ({ date: m.date.slice(0, 10), code: null, p: m.matchPercent }));
+    return [...classifiers.filter((s) => s.date === latest[s.code]), ...majors]
+      .filter((x) => x.p >= 0)
+      .map((x) => ({ ...x, p: Math.min(QHF.MAX_PERCENT, x.p) }))
+      .sort((a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : b.p - a.p));
   }
 
   // What the member needs: { status: "loading" | "error" | "notfound" | "unclassed" | "gm" | "target", ... }
@@ -360,7 +363,7 @@ td { font-family: var(--font-num); font-size: .95rem; }
     }).then((j) => {
       if (seq !== lookupSeq) return;
       memberInfo = j ? summarize(j, num, div) : { status: "notfound" };
-      if (memberInfo.status === "target" && state.cls !== "member") state.cls = "member";
+      if (memberInfo.status === "target") { state.cls = "member"; state.preferMember = true; }
       if (memberInfo.status !== "target" && state.cls === "member") state.cls = "A";
       showMember(); renderTables();
     }).catch(() => {
@@ -372,20 +375,20 @@ td { font-family: var(--font-num); font-size: .95rem; }
   }
 
   function summarize(j, num, div) {
-    const percents = memberPercents(j, div);
-    const base = { num, div, name: j.info.name, count: percents.length,
+    const scores = memberScores(j, div);
+    const percents = scores.map((x) => x.p);
+    const base = { num, div, name: j.info.name, count: percents.length, scores,
       link: `https://www.hitfactor.info/shooters/${HF_DIV[div]}/${encodeURIComponent(num)}` };
-    if (percents.length < 5) return { ...base, status: "unclassed" };
-    const avg = percents.length >= 6 ? QHF.classAverage(percents) : percents.reduce((t, p) => t + p, 0) / 5;
-    let cls = QHF.classFor(avg);
-    // USPSA never moves a member down a class, so keep the class USPSA has on record if it's higher.
-    const rank = (id) => QHF.CLASSES.findIndex(([k]) => k === id);
-    const hq = j.info.hqClass;
-    if (percents.length >= 6 && rank(hq) >= 0 && rank(hq) < rank(cls)) cls = hq;
+    // The class USPSA has on record wins: hitfactor.info misses some scores, and USPSA never moves
+    // a member down. Without one, work it out from the scores.
+    const hq = QHF.CLASSES.some(([k]) => k === j.info.hqClass) ? j.info.hqClass : null;
+    if (!hq && percents.length < 5) return { ...base, status: "unclassed" };
+    const avg = percents.length >= 6 ? QHF.classAverage(percents)
+      : percents.length === 5 ? percents.reduce((t, p) => t + p, 0) / 5 : null;
+    const cls = hq || QHF.classFor(avg);
     const next = QHF.nextClass(cls);
     if (!next) return { ...base, status: "gm", avg, cls };
-    return { ...base, status: "target", avg, cls, unclassed: percents.length < 6, next,
-      percent: QHF.neededPercent(percents, next.min) };
+    return { ...base, status: "target", avg, cls, unclassed: !hq && percents.length < 6, next };
   }
 
   function showMember() {
@@ -399,9 +402,9 @@ td { font-family: var(--font-num); font-size: .95rem; }
       : m.status === "error" ? "Couldn't reach hitfactor.info. Try again in a moment."
       : m.status === "notfound" ? "Member not found."
       : m.status === "unclassed" ? `Member is unclassed.${m.count ? ` ${who}${m.count} classifier score${m.count === 1 ? "" : "s"} in ${esc(division().name)}.` : ""}${src}`
-      : m.status === "gm" ? `${who}GM in ${esc(division().name)} (${m.avg.toFixed(2)}%). There's no class above GM.${src}`
-      : m.unclassed ? `${who}Unclassed in ${esc(division().name)} with 5 scores (average ${m.avg.toFixed(2)}%). The 6th sets the class.${src}`
-      : `${who}${m.cls} in ${esc(division().name)} (best 6 of last 8: ${m.avg.toFixed(4)}%).${src}`;
+      : m.status === "gm" ? `${who}GM in ${esc(division().name)}. There's no class above GM.${src}`
+      : m.unclassed ? `${who}Unclassed in ${esc(division().name)} with 5 scores (average ${m.avg.toFixed(4)}%). The 6th sets the class.${src}`
+      : `${who}${m.cls} in ${esc(division().name)}${m.avg != null ? ` (best 6 of last 8: ${m.avg.toFixed(4)}%)` : ""}.${src}`;
   }
 
   function hhfBlock(c, div) {
@@ -429,9 +432,10 @@ td { font-family: var(--font-num); font-size: .95rem; }
       return;
     }
     const best = c.points;
-    const t = memberTarget(h);
-    if (!t && state.cls === "member") state.cls = "A";
-    const targetRow = !t ? "" : `<tr class="target" data-cls="member" aria-selected="${state.cls === "member"}"><td>${esc(state.member)} → ${t.cls}</td>
+    const t = memberTarget(h, c);
+    if (t && !t.reach && state.preferMember) state.cls = "member";
+    if ((!t || t.reach) && state.cls === "member") state.cls = "A";
+    const targetRow = !t || t.reach ? "" : `<tr class="target" data-cls="member" aria-selected="${state.cls === "member"}"><td>${esc(state.member)} → ${t.cls}</td>
       <td>${t.percent.toFixed(2)}%</td><td>${t.hf ? t.hf.toFixed(4) : "any"}</td><td>${t.hf ? QHF.maxTime(best, t.hf).toFixed(2) + "s" : "–"}</td></tr>`;
     $("#classes").innerHTML = `<div class="scroll"><table class="classes">
       <thead><tr><th>Class</th><th>Score</th><th>Min HF</th><th>Time at all A</th></tr></thead>
@@ -445,23 +449,30 @@ td { font-family: var(--font-num); font-size: .95rem; }
         return `<tr data-cls="${k.id}" aria-selected="${state.cls === k.id}"><td>${k.id}</td>
           <td>${k.min}%</td><td>${mhf.toFixed(4)}</td><td>${t.toFixed(2)}s</td></tr>`;
       }).join("")}</tbody></table></div>
-      <p class="note">${t ? `The first row is what ${esc(state.member)} needs on ${c.code} to make ${t.cls}. ` : ""}Pick a class to see every hit combination that makes it.</p>`;
+      <p class="note">${!t ? "" : t.reach ? `One run on ${c.code} can't get ${esc(state.member)} to ${t.cls}: even ${QHF.MAX_PERCENT}% would bring the average to ${t.best.toFixed(4)}%. `
+        : `The first row is what ${esc(state.member)} needs on ${c.code} to make ${t.cls}. `}Pick a class to see every hit combination that makes it.</p>`;
     $("#classes").querySelectorAll("tbody tr").forEach((tr) => tr.addEventListener("click", () => {
-      state.cls = tr.dataset.cls; renderTables();
+      state.cls = tr.dataset.cls; state.preferMember = state.cls === "member"; renderTables();
       $("#combos").scrollIntoView({ block: "nearest" });
     }));
     renderCombos(c, h);
   }
 
   // The member's needed hit factor on this classifier, or null when there's no target to show.
-  function memberTarget(h) {
+  // The new score is the newest; it replaces an earlier attempt at the same classifier, otherwise
+  // the oldest of the last 8 drops out. A score counts for at most 110%, so some targets can't be reached.
+  function memberTarget(h, c) {
     const m = memberInfo;
-    if (!m || m.status !== "target" || m.num !== state.member || m.div !== state.division || m.percent == null) return null;
-    return { cls: m.next.id, percent: m.percent, hf: QHF.minHitFactor(h, m.percent) };
+    if (!m || m.status !== "target" || m.num !== state.member || m.div !== state.division) return null;
+    const percents = m.scores.filter((s) => s.code !== c.code).map((s) => s.p);
+    const percent = QHF.neededPercent(percents, m.next.min);
+    if (percent == null) return null;
+    if (percent > QHF.MAX_PERCENT) return { cls: m.next.id, reach: true, best: QHF.classAverage([QHF.MAX_PERCENT, ...percents]) };
+    return { cls: m.next.id, percent, hf: QHF.minHitFactor(h, percent) };
   }
 
   function renderCombos(c, h) {
-    const t = state.cls === "member" ? memberTarget(h) : null;
+    const t = state.cls === "member" ? memberTarget(h, c) : null;
     const k = t ? { id: t.cls, min: t.percent, member: true } : state.data.classes.find((x) => x.id === state.cls);
     const box = $("#combos");
     if (t && !t.hf) {
