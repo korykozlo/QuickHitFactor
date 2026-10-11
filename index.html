@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
+<meta name="qhf-api" content="">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>QuickHitFactor</title>
 <meta name="description" content="The hit factor, hits and time it takes to make each class on every active USPSA classifier.">
@@ -287,52 +288,24 @@ td { font-family: var(--font-num); font-size: .95rem; }
     renderTables();
   }
 
-  // Member lookup. uspsa.org can't be read from another site's page (bot challenge, no CORS),
-  // so scores come from hitfactor.info's open API, which mirrors PractiScore uploads. Its percentages
-  // don't match USPSA's, so classifier percentages are worked out here from each score's HF.
-  const HF_DIV = { open: "opn", limited: "ltd", "limited-10": "l10", "limited-optics": "lo", "carry-optics": "co",
-    production: "prod", "single-stack": "ss", revolver: "rev", pcc: "pcc" };
+  // Member lookup: the server reads the member's classification page on uspsa.org
+  // (GET <api>/api/member/<number>) and returns it as JSON. The API lives on this site unless the
+  // qhf-api meta tag points somewhere else.
+  const API = (document.querySelector('meta[name="qhf-api"]')?.content || "").replace(/\/+$/, "");
   const lookups = new Map();
 
-  function fetchMember(num, div) {
-    const key = num + "/" + div;
-    if (!lookups.has(key)) {
-      const api = "https://www.hitfactor.info/api";
-      const get = (url) => fetch(url).then((r) => { if (!r.ok) throw new Error(r.status); return r.json(); });
-      const p = Promise.all([
-        get(`${api}/shooters/${HF_DIV[div]}/${encodeURIComponent(num)}`),
-        get(`${api}/matches/matchScores?memberNumber=${encodeURIComponent(num)}&division=${HF_DIV[div]}`),
-      ]).then(([shooter, matches]) => ({ ...shooter, matches: Array.isArray(matches) ? matches : [] }));
-      p.catch(() => lookups.delete(key)); // let a failed lookup be retried
-      lookups.set(key, p);
-    }
-    return lookups.get(key);
-  }
-
-  const found = (j) => !!(j && j.info && j.info.memberNumber && j.info.memberNumber !== "N/A");
-
-  // Classification scores in this division, newest first, the way USPSA counts them:
-  // - classifiers: HF ÷ this app's HHF (matches USPSA's own percentage), or hitfactor.info's
-  //   percentage for a classifier this app has no HHF for. A zero still takes its place.
-  // - major matches (level II and up): the member's match percentage, from hitfactor.info's Majors tab.
-  // Each score counts for at most 110%. A classifier shot again on a later day replaces the
-  // earlier attempt ("most recent override"). On the same date the higher percentage counts as more recent.
-  function memberScores(j, div) {
-    const classifiers = (j.classifiers || [])
-      .filter((s) => s.source === "Stage Score" && s.hf >= 0)
-      .map((s) => {
-        const h = state.data.classifiers.find((c) => c.code === s.classifier)?.hhf[div];
-        return { date: s.sd.slice(0, 10), code: s.classifier, p: h ? (100 * s.hf) / h : s.percent };
+  function fetchMember(num) {
+    if (!lookups.has(num)) {
+      const p = fetch(`${API ? API + "/" : ""}api/member/${encodeURIComponent(num)}`).then(async (r) => {
+        if (r.status === 404) return null;
+        const body = await r.json().catch(() => ({}));
+        if (!r.ok) throw Object.assign(new Error(body.message || r.status), { code: body.error });
+        return body;
       });
-    const latest = {};
-    for (const s of classifiers) if (!latest[s.code] || s.date > latest[s.code]) latest[s.code] = s.date;
-    const majors = (j.matches || [])
-      .filter((m) => m.level >= 2 && m.matchPercent > 0)
-      .map((m) => ({ date: m.date.slice(0, 10), code: null, p: m.matchPercent }));
-    return [...classifiers.filter((s) => s.date === latest[s.code]), ...majors]
-      .filter((x) => x.p >= 0)
-      .map((x) => ({ ...x, p: Math.min(QHF.MAX_PERCENT, x.p) }))
-      .sort((a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : b.p - a.p));
+      p.catch(() => lookups.delete(num)); // let a failed lookup be retried
+      lookups.set(num, p);
+    }
+    return lookups.get(num);
   }
 
   // What the member needs: { status: "loading" | "error" | "notfound" | "unclassed" | "gm" | "target", ... }
@@ -354,37 +327,30 @@ td { font-family: var(--font-num); font-size: .95rem; }
     if (!num) { memberInfo = null; showMember(); renderTables(); return; }
     memberInfo = { status: "loading" };
     showMember();
-    fetchMember(num, div).then((j) => {
-      if (found(j)) return j;
-      // No scores in this division; check the rest to tell "unclassed here" from "not found".
-      const others = Object.keys(HF_DIV).filter((d) => d !== div);
-      return Promise.all(others.map((d) => fetchMember(num, d).catch(() => null)))
-        .then((all) => (all.some(found) ? { info: { memberNumber: num }, classifiers: [] } : null));
-    }).then((j) => {
+    fetchMember(num).then((page) => {
       if (seq !== lookupSeq) return;
-      memberInfo = j ? summarize(j, num, div) : { status: "notfound" };
+      memberInfo = page ? summarize(page, num, div) : { status: "notfound" };
       if (memberInfo.status === "target") { state.cls = "member"; state.preferMember = true; }
       if (memberInfo.status !== "target" && state.cls === "member") state.cls = "A";
       showMember(); renderTables();
-    }).catch(() => {
+    }).catch((e) => {
       if (seq !== lookupSeq) return;
-      memberInfo = { status: "error" };
+      memberInfo = { status: "error", code: e.code };
       if (state.cls === "member") state.cls = "A";
       showMember(); renderTables();
     });
   }
 
-  function summarize(j, num, div) {
-    const scores = memberScores(j, div);
+  // USPSA's own class and average win; the scores only decide what the next classifier needs.
+  // Without a class on record (U), the class is worked out from the scores.
+  function summarize(page, num, div) {
+    const d = page.divisions[div] || { scores: [] };
+    const scores = QHF.countedScores(d.scores);
     const percents = scores.map((x) => x.p);
-    const base = { num, div, name: j.info.name, count: percents.length, scores,
-      link: `https://www.hitfactor.info/shooters/${HF_DIV[div]}/${encodeURIComponent(num)}` };
-    // The class USPSA has on record wins: hitfactor.info misses some scores, and USPSA never moves
-    // a member down. Without one, work it out from the scores.
-    const hq = QHF.CLASSES.some(([k]) => k === j.info.hqClass) ? j.info.hqClass : null;
+    const base = { num, div, name: page.member.name, count: percents.length, scores, link: page.source };
+    const hq = QHF.CLASSES.some(([k]) => k === d.class) ? d.class : null;
     if (!hq && percents.length < 5) return { ...base, status: "unclassed" };
-    const avg = percents.length >= 6 ? QHF.classAverage(percents)
-      : percents.length === 5 ? percents.reduce((t, p) => t + p, 0) / 5 : null;
+    const avg = hq ? d.percent : percents.length >= 6 ? QHF.classAverage(percents) : percents.reduce((t, p) => t + p, 0) / 5;
     const cls = hq || QHF.classFor(avg);
     const next = QHF.nextClass(cls);
     if (!next) return { ...base, status: "gm", avg, cls };
@@ -396,15 +362,16 @@ td { font-family: var(--font-num); font-size: .95rem; }
     if (!note) return;
     const m = memberInfo;
     const who = m && m.name ? `${esc(m.name)} · ` : "";
-    const src = m && m.link && m.count ? ` <a href="${m.link}" target="_blank" rel="noopener">Scores from hitfactor.info</a>.` : "";
+    const src = m && m.link ? ` <a href="${esc(m.link)}" target="_blank" rel="noopener">Scores from uspsa.org</a>.` : "";
     note.innerHTML = !m ? ""
       : m.status === "loading" ? "Looking up member…"
-      : m.status === "error" ? "Couldn't reach hitfactor.info. Try again in a moment."
+      : m.status === "error" ? (m.code === "blocked" ? "uspsa.org turned the lookup away. Try again later."
+        : m.code === "invalid" ? "That isn't a USPSA member number." : "Couldn't reach uspsa.org. Try again in a moment.")
       : m.status === "notfound" ? "Member not found."
-      : m.status === "unclassed" ? `Member is unclassed.${m.count ? ` ${who}${m.count} classifier score${m.count === 1 ? "" : "s"} in ${esc(division().name)}.` : ""}${src}`
+      : m.status === "unclassed" ? `${who}Unclassed in ${esc(division().name)}${m.count ? ` with ${m.count} classifier score${m.count === 1 ? "" : "s"}` : ""}.${src}`
       : m.status === "gm" ? `${who}GM in ${esc(division().name)}. There's no class above GM.${src}`
       : m.unclassed ? `${who}Unclassed in ${esc(division().name)} with 5 scores (average ${m.avg.toFixed(4)}%). The 6th sets the class.${src}`
-      : `${who}${m.cls} in ${esc(division().name)}${m.avg != null ? ` (best 6 of last 8: ${m.avg.toFixed(4)}%)` : ""}.${src}`;
+      : `${who}${m.cls} in ${esc(division().name)}${m.avg != null ? ` (${m.avg.toFixed(4)}%)` : ""}.${src}`;
   }
 
   function hhfBlock(c, div) {

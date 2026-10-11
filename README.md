@@ -12,11 +12,9 @@ Pick a classifier to see its stage diagram, pick a division (and Minor or Major 
 
 ## Member lookup
 Type a USPSA member number to see the hit factor that member needs on the selected classifier and division to move up a class, with the hit/time combinations for it.
-- Scores come from [hitfactor.info](https://www.hitfactor.info)'s open API (`/api/shooters/<division>/<member>`), which mirrors classifier scores uploaded to PractiScore. uspsa.org's classification pages sit behind a bot challenge and send no CORS headers, so a page on another site can't read them.
-- hitfactor.info's own percentages don't match USPSA's, so each classifier's percentage is worked out here as HF ÷ this app's HHF (this matches the percentages on uspsa.org). Major matches (level II and up) count too, using the member's match percentage from hitfactor.info's Majors tab (`/api/matches/matchScores`).
-- Class = average of the best 6 of the latest 8 of those scores in the division; on the same date the higher percentage counts as more recent.
-- USPSA's rules as its classification page states them: each score counts for at most 110%; a classifier shot again on a later day replaces the earlier attempt (the new score does the same); a zero still takes its place in the window. The class shown is the one USPSA has on record (hitfactor.info's `hqClass`) when there is one, since hitfactor.info misses some scores and USPSA never moves anyone down.
-- USPSA never moves a member down, so the class USPSA has on record (as hitfactor.info reports it) wins when it's higher.
+- Scores come straight from the member's classification page on uspsa.org (`uspsa.org/classification/<member number>`). uspsa.org sends no CORS headers, so a small server (`server/`) fetches and parses the page and the app calls it at `api/member/<number>`.
+- The class and average shown are the ones USPSA has on file. The scores decide what the next classifier needs: best 6 of the latest 8 in the division, each counting for at most 110%, a classifier shot again on a later day replacing the earlier attempt, zeros counting, and major matches counting at the member's match percentage. On the same date the higher percentage counts as more recent. Worked out this way, the average matches USPSA's own on the pages tested.
+- uspsa.org sits behind a Cloudflare bot check that turns away requests from some networks (it blocks the cloud machines this was built on). The server never tries to get past it: it reports the lookup as blocked instead.
 
 ## Scoring
 - Min HF = HHF × class percentage (MAX 110, HHF 100, GM 95, M 85, A 75, B 60, C 40).
@@ -24,6 +22,8 @@ Type a USPSA member number to see the hit factor that member needs on the select
 - Max time = points ÷ min HF, rounded down to 0.01 s. No-shoots and procedurals are not included.
 
 ## Run it
-`npm start`, then open http://localhost:8000. `npm test` runs the calculator tests.
+`npm start` runs the server (Node 18 or later, no dependencies), then open http://localhost:8000. `npm test` runs the tests.
 
-Pushes to `main` deploy to GitHub Pages through `.github/workflows/pages.yml` once Pages is set to "GitHub Actions" in the repository settings.
+Server settings, all optional: `PORT` (default 8000); `ALLOWED_ORIGIN` for a front end hosted on another site (default `*`); `CACHE_MINUTES` (default 15); `USPSA_PAGES_DIR` to read saved pages named `<NUMBER>.html` from a folder instead of fetching them. If the front end is hosted apart from the server, put the server's address in the `qhf-api` meta tag in `index.html`.
+
+Pushes to `main` deploy the static site to GitHub Pages through `.github/workflows/pages.yml`. GitHub Pages can't run the server, so member lookup needs the server hosted somewhere too.
