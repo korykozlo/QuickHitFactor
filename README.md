@@ -10,6 +10,12 @@ Pick a classifier to see its stage diagram, pick a division (and Minor or Major 
 - `diagrams/`: page 1 of each USPSA stage sheet (© USPSA), rendered from `https://uspsa.org/resources/classifiers/<code>.pdf`.
 - `tools/build_data.py` rebuilds both from the downloaded PDFs.
 
+## Member lookup
+Type a USPSA member number to see the hit factor that member needs on the selected classifier and division to move up a class, with the hit/time combinations for it.
+- Scores come from [hitfactor.info](https://www.hitfactor.info)'s open API (`/api/shooters/<division>/<member>`), which mirrors classifier scores uploaded to PractiScore. uspsa.org's classification pages sit behind a bot challenge and send no CORS headers, so a page on another site can't read them.
+- Class = average of the best 6 of the latest 8 classifier percentages in the division (each score's HF ÷ this app's HHF where it has one). Under 5 scores is unclassed; with 5, the 6th score sets the class, and the target is the class above their 5-score average.
+- USPSA never moves a member down, so the class USPSA has on record (as hitfactor.info reports it) wins when it's higher.
+
 ## Scoring
 - Min HF = HHF × class percentage (MAX 110, HHF 100, GM 95, M 85, A 75, B 60, C 40).
 - Points: A 5; C 3 minor / 4 major; D 1 minor / 2 major; miss −10. Steel scores as an A or a miss.
