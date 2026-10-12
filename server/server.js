@@ -5,6 +5,7 @@
 //   ALLOWED_ORIGIN  value for Access-Control-Allow-Origin, for a front end hosted elsewhere (default *)
 //   USPSA_PAGES_DIR read <dir>/<NUMBER>.html instead of fetching, for pages saved from a browser
 //   CACHE_MINUTES   how long a looked-up member is kept (default 15)
+//   SCRAPE_FALLBACK set to 0 to skip the Playwright fallback when uspsa.org blocks a plain request
 
 const http = require("node:http");
 const fs = require("node:fs");
@@ -18,6 +19,7 @@ const PORT = Number(process.env.PORT) || 8000;
 const ALLOWED_ORIGIN = process.env.ALLOWED_ORIGIN || "*";
 const PAGES_DIR = process.env.USPSA_PAGES_DIR;
 const CACHE_MS = (Number(process.env.CACHE_MINUTES) || 15) * 60 * 1000;
+const SCRAPE_FALLBACK = process.env.SCRAPE_FALLBACK !== "0";
 const USER_AGENT = "QuickHitFactor/1.0 (+https://github.com/korykozlo/QuickHitFactor)";
 
 const pageUrl = (num) => `https://uspsa.org/classification/${encodeURIComponent(num)}`;
@@ -114,6 +116,10 @@ async function loadPage(num) {
 
   // If simple HTTP fetch was blocked by Cloudflare, scrape using Playwright
   if (!html && blocked) {
+    if (!SCRAPE_FALLBACK) {
+      if (cachedHtml) return cachedHtml;
+      throw new LookupError(502, "blocked", "uspsa.org blocked the request. Try again later.");
+    }
     try {
       html = await scrapeWithPlaywright(num);
     } catch (e) {
@@ -160,7 +166,7 @@ function lookup(num) {
 }
 
 const TYPES = { ".html": "text/html; charset=utf-8", ".js": "text/javascript; charset=utf-8", ".json": "application/json",
-  ".png": "image/png", ".svg": "image/svg+xml", ".css": "text/css; charset=utf-8" };
+  ".png": "image/png", ".webp": "image/webp", ".svg": "image/svg+xml", ".css": "text/css; charset=utf-8" };
 const PUBLIC = ["index.html", "calc.js", "og-image.png", "data/", "diagrams/"];
 
 function send(res, status, body, headers = {}) {

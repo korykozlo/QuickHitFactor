@@ -22,6 +22,11 @@ Type a USPSA member number to see the hit factor that member needs on the select
 ## Run it
 `npm start` runs the server (Node 18 or later, no dependencies), then open http://localhost:8000. `npm test` runs the tests.
 
-Server settings, all optional: `PORT` (default 8000); `ALLOWED_ORIGIN` for a front end hosted on another site (default `*`); `CACHE_MINUTES` (default 15); `USPSA_PAGES_DIR` to read saved pages named `<NUMBER>.html` from a folder instead of fetching them. If the front end is hosted apart from the server, put the server's address in the `qhf-api` meta tag in `index.html`.
+Server settings, all optional: `SCRAPE_FALLBACK=0` turns off the Playwright fallback used when uspsa.org blocks a plain request; `PORT` (default 8000); `ALLOWED_ORIGIN` for a front end hosted on another site (default `*`); `CACHE_MINUTES` (default 15); `USPSA_PAGES_DIR` to read saved pages named `<NUMBER>.html` from a folder instead of fetching them. If the front end is hosted apart from the server, put the server's address in the `qhf-api` meta tag in `index.html`.
 
 Pushes to `main` deploy the static site to GitHub Pages through `.github/workflows/pages.yml`. GitHub Pages can't run the server, so member lookup needs the server hosted somewhere too.
+
+## Docker and Render
+`docker build -t quickhitfactor . && docker run -p 8000:8000 quickhitfactor` runs the app and server in one container. The image has no Python or Playwright and sets `SCRAPE_FALLBACK=0`, so it only makes plain requests to uspsa.org; when uspsa.org's Cloudflare check blocks one, member lookup says so and the rest of the app keeps working.
+
+To deploy on Render, create a Blueprint from this repo (New > Blueprint) and it picks up `render.yaml`: one free Docker web service that rebuilds on every push to `main`. Render sets `PORT` itself. To use it from the GitHub Pages site, put the Render URL in the `qhf-api` meta tag in `index.html`.
